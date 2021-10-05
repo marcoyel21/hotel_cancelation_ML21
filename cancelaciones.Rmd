@@ -1,0 +1,118 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE, results="hide"}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+library(tidyverse)
+library(Hmisc)
+library(skimr)
+library(naniar)
+library(patchwork)
+library(plotly)
+library(ggplot2)
+library(DataExplorer)
+library(knitr)
+library(reshape2)
+
+
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+if(!require("PerformanceAnalytics")) install.packages("PerformanceAnalytics")
+if(!require("corrplot")) install.packages("corrplot")
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+library(PerformanceAnalytics)
+library(corrplot)
+```
+
+# leo datos
+
+
+
+```{r echo = TRUE}
+data<-read.csv("entrena.csv",stringsAsFactors = F)
+```
+ 
+# Creo las 3 bases
+```{r echo = TRUE, results='hide'}
+knitr::opts_chunk$set( message = FALSE, results='hide')
+idx <- sample(seq(1, 3), size = nrow(data), replace = TRUE, prob = c(.7, 2, .1))
+train <- data[idx == 1,]
+test <- data[idx == 2,]
+cal <- data[idx == 3,]
+
+```
+
+# summary
+```{r echo = TRUE, results = 'show'}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, results = 'show')
+summary(train)
+```
+# proporcion de cancelados
+
+```{r}
+a <- table(train$is_canceled)
+prop <- prop.table(a)
+prop
+```
+
+```{r}
+
+sub_cancelados <- subset(train, is_canceled == "cancelado")
+```
+
+
+#funcion para graficar las variables originales
+```{r}
+analisis_cancelaciones <- function(datos,nombre) {
+cancel <- table(datos)
+par(cex=0.5) #control size of labels
+g_1 <- barplot(cancel, main = nombre)
+  return(g_1)
+}
+```
+
+#funcion para graficar las variables ordenadas
+```{r}
+analisis_cancelaciones_ord <- function(datos,nombre) {
+x <- table(datos)
+cancel <- x[order(x,decreasing = TRUE)]
+par(cex=0.5) #control size of labels
+g_1 <- barplot(cancel, main = nombre)
+  return(g_1)
+}
+```
+
+
+# analisis de todas las variables con el subconjunto de canceladas
+
+```{r}
+ncol(sub_cancelados) 
+nombres <- names(sub_cancelados)
+for (i in c(1:ncol(sub_cancelados))){
+analisis_cancelaciones(sub_cancelados[,i],nombres[i])
+}
+```
+
+# analisis de todas las variables con el subconjunto de canceladas ordenas
+
+```{r}
+ncol(sub_cancelados) 
+nombres <- names(sub_cancelados)
+for (i in c(1:ncol(sub_cancelados))){
+analisis_cancelaciones_ord(sub_cancelados[,i],nombres[i])
+}
+```
+
+
+

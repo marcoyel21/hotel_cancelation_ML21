@@ -1,0 +1,302 @@
+---
+title: "Feature Engienerring"
+author: "Marco Ramos"
+date: "10/4/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preprocesamiento
+
+```{r}
+library(dplyr)
+library(stargazer)
+library(stringr)
+
+
+
+
+#____________________
+#CARGO LOS DATOS
+#____________________
+train<-read.csv("data/entrena.csv")
+test<-read.csv("data/prueba.csv")
+
+#obtengo el id de observacion para test
+test_id<-test %>% select(1)
+test<-test %>% select(-1)
+
+#____________________
+#PREPARO LOS DATOS 
+#____________________
+
+
+# Creo mi Y (1 si se cancelo, 0 eoc)
+train$is_canceled<-as.factor(train$is_canceled)
+train<- train %>% mutate(y=ifelse(is_canceled=="cancelado",1,0))
+train$is_canceled<-NULL
+train<-train[,c(which(colnames(train)=="y"),which(colnames(train)!="y"))]
+#MANDO Y A LA PRIMERA COLUMNA
+
+prepare_data<-function(data){
+
+data$arrival_date_year<-as.factor(data$arrival_date_year)
+data$arrival_date_month<-as.factor(data$arrival_date_month)
+data$arrival_date_week_number<-as.factor(data$arrival_date_week_number)
+data$arrival_date_day_of_month<-as.factor(data$arrival_date_day_of_month)
+data$meal<-as.factor(data$meal)
+data$country<-as.factor(data$country)
+data$market_segment<-as.factor(data$market_segment)
+data$distribution_channel<-as.factor(data$distribution_channel)
+data$agent<-as.factor(data$agent)
+data$company<-as.factor(data$company)
+data$customer_type<-as.factor(data$customer_type)
+#data$reserved_room_type<-as.factor(data$reserved_room_type)
+#data$assigned_room_type<-as.factor(data$assigned_room_type)
+
+
+# AD HOC
+
+# preprocesamiento DE TIPO DE VAIRABLE adecuado
+data$hotel<-as.factor(data$hotel)
+data<- data %>% mutate(city_hotel=ifelse(hotel=="City Hotel",1,0))
+data$hotel<-NULL
+
+
+### En este caso quito espacios para que no haya problema durante la codificacion
+data$deposit_type<-as.factor(data$deposit_type)
+data<- data %>% mutate(deposit_type=ifelse(deposit_type=="No Deposit","A",
+                                           ifelse(deposit_type=="Non Refund","B","C")))
+
+# quito caracteres especiales con regex para que no haya problema con codificacion
+data<-data %>% mutate(market_segment=ifelse(market_segment=="Offline TA/TO",str_replace(market_segment,"/","_"),market_segment),
+                      distribution_channel=ifelse(distribution_channel=="TA/TO",str_replace(distribution_channel,"/","_"),distribution_channel),
+                      market_segment=str_remove_all(market_segment," "))
+data$market_segment<-as.factor(data$market_segment)
+data$distribution_channel<-as.factor(data$distribution_channel)
+
+
+#feat eng
+
+## solamente hize una variable por cada combinacion posible 
+data<-data %>% mutate(dif_room= ifelse(reserved_room_type==assigned_room_type,0,1),
+                      weekmonth=paste(arrival_date_month,arrival_date_week_number, sep = "_"),
+                      daymont=paste(arrival_date_month,arrival_date_day_of_month, sep = "_"),
+                      weekdaymonth=paste(weekmonth,arrival_date_day_of_month, sep ="_"))
+data$weekmonth<-as.factor(data$weekmonth)
+data$daymont<-as.factor(data$daymont)
+data$weekdaymonth<-as.factor(data$weekdaymonth)
+
+data
+}
+
+```
+
+## Preprocesamiento de estructura de bases de datos
+
+### One hot encoding
+
+```{r}
+# creo una funcion para que las bases de datos cuenten con los mismos "levels"
+# este paso es crucial para asegurarnos que traning, set y el modelo hablen "el mismo idioma", es decir que tengan las mismas variables
+equallevels <- function(x, y) {
+    if (is.data.frame(x) & is.data.frame(y)) {
+        com <- intersect(x = names(x), y = names(y))
+        for (i in com) {
+            if (!is.null(levels(y[[i]]))) {
+                x[[i]] <- factor(x[[i]], levels = levels(y[[i]]))
+            }
+        }
+        return(x)
+    } else {
+        stop("`x` and `y` must be a data.frame.")
+    }
+}
+
+library(fastDummies)
+set.seed(123)
+
+#aplico la preparacion de los datos a cada set
+train<-prepare_data(train)
+test<-prepare_data(test)
+
+
+# aplico el one hot encoding
+newdata_train <-dummy_cols(train,split = T,remove_first_dummy = T)
+
+newdata_test <- dummy_cols(test,split = T,remove_first_dummy = T)
+```
+
+
+### Subset del one hot encoding (para experimentar)
+
+```{r}
+# De todas las mas de mil columnas, tomo un subset de tamaño x=99
+sample_train<-newdata_train %>% select(1:10)
+sample_test<-newdata_test %>% select(1:9)
+#Quito la columna de año por problematica a la hora de convertir a matriz esparsa
+sample_train$arrival_date_year<-NULL
+sample_test$arrival_date_year<-NULL
+# Quito los nas por ceros (debemos solucionar esto en el preprocesamiento)
+sample_train[is.na(sample_train)] <- 0
+sample_test[is.na(sample_test)] <- 0
+
+
+```
+
+
+## CV
+
+Ahora sobre el conjunto de entrenamiento guardaremos un cacho para probar.
+
+```{r}
+# proporción que queremos de training
+training_size <- 0.8
+# filas de training
+training_rows <- sample(seq_len(nrow(sample_train)),
+                        size=floor(training_size*nrow(sample_train)))
+#training set
+data_training <- sample_train[training_rows,]
+#training cuenta con la y
+
+
+#validation set
+# la variable objetivo por separado
+data_validation <- sample_train[-training_rows,-1] #sin la y
+y <- sample_train[-training_rows,1] 
+
+```
+
+
+
+## Sparse Matriz
+
+### Preprocesamiento para matriz rala
+
+Los modelos ganadores aprovechan las matrices ralas
+
+```{r}
+library(Matrix)
+library(gamlr)
+library(Matrix.utils)
+
+#Matriz de covariates
+#data_training<-sample_train
+Xa <-data_training %>% select(-1) #training menos y
+Xb <-equallevels(data_validation,Xa)
+Xc <-equallevels(sample_test,Xa)
+
+#para manejo de nas, si lo quito, por alguna razon la conversion a matriz rala me quita unas obs
+
+options(na.action='na.pass')
+
+```
+
+### Matricez ralas
+
+```{r}
+
+#se quita intercepto
+#se ponen todas las columnas
+Xa <- sparse.model.matrix(~.+0, data = Xa)
+Xb <- sparse.model.matrix(~.+0, data = Xb)
+Xc <- sparse.model.matrix(~.+0, data = Xc)
+
+#vector de Y´s
+Ya<-data_training$y
+
+```
+
+## Estimacion CV LASSO
+
+Cross-Validated LASSO-logit
+
+Seestima un cross validated LASSO y se muestra el la gráfica de CV Binomial Deviance vs Complejidad
+
+```{r}
+#CV LASSO
+# se hacen 5 folds 
+cvlasso_a<-cv.gamlr(x = Xa, y = Ya, verb = T, family = 'binomial', nfold = 5)
+#Grafica
+plot(cvlasso_a)
+
+```
+
+
+### Grafica Lasso de los coeficientes vs la complejidad del modelo.
+```{r}
+plot(cvlasso_a$gamlr)
+```
+
+
+A continuacion una tabla con los coeficientes que se selecciona para el CV LASSO. 
+
+```{r}
+coefs<-coef(cvlasso_a, select="min", k=2, corrected=TRUE)
+coefs<-as.data.frame(coefs[,1])
+names(coefs)<-"valor"
+coefs<-coefs %>% filter(valor !=0)
+modelvariables<-row.names(coefs)
+```
+
+### Hiper parametro
+
+Automaticamente se elige el lambda que minimiza la devianza OOS
+
+```{r}
+# Identificador para el lambda deseado
+# Valor del lambda deseado
+#lambda resultante
+a_lambda<- colnames(coef(cvlasso_a, select="min"))
+cvlasso_a$gamlr$lambda[a_lambda]
+```
+
+### reentreno solo con las variables ganadoras
+```{r}
+
+```
+
+
+
+### LOG LOSS test OOS
+```{r}
+
+#Predicciones
+lasso_score <- predict(cvlasso_a,
+               newdata = Xb,
+               type="response",
+               select = "min" )
+
+
+#dataframe
+A <- data.frame(y, lasso_score)
+colnames(A)[2] <- c('lasso_score')
+
+library(MLmetrics)
+LogLoss(A$lasso_score,A$y)
+```
+
+### output
+```{r}
+#require(methods)
+#X_train <- sparse.model.matrix(~.+0, data = sample_train)
+#Xt<- sparse.model.matrix(~.+0, data = sample_test)
+
+#Predicciones
+lasso_score <- predict(cvlasso_a,
+               newdata = Xc,
+               type="response",
+               select = "min")
+
+
+length(lasso_score)
+#dataframe
+C <- data.frame(test_id, lasso_score)
+colnames(C) <- c('id','prob')
+write.csv(C,"submission.csv",row.names = F)
+
+
+```

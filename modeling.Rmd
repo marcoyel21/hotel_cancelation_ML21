@@ -149,8 +149,8 @@ sample_train<-newdata_train #%>% select(1:100)
 sample_test<-newdata_test #%>% select(1:99)
 
 #Quito la columna de año por problematica a la hora de convertir a matriz esparsa
-sample_train$arrival_date_year<-NULL
-sample_test$arrival_date_year<-NULL
+#sample_train$arrival_date_year<-NULL
+#sample_test$arrival_date_year<-NULL
 
 ```
 

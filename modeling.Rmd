@@ -16,9 +16,6 @@ library(dplyr)
 library(stargazer)
 library(stringr)
 
-
-
-
 #____________________
 #CARGO LOS DATOS
 #____________________
@@ -43,6 +40,11 @@ train<-train[,c(which(colnames(train)=="y"),which(colnames(train)!="y"))]
 
 prepare_data<-function(data){
 
+# QUITO CEROS Y NULLS
+data[is.na(data)] <- "0"
+data[is.null(data)] <- "0"
+
+# Codifico
 data$arrival_date_year<-as.factor(data$arrival_date_year)
 data$arrival_date_month<-as.factor(data$arrival_date_month)
 data$arrival_date_week_number<-as.factor(data$arrival_date_week_number)
@@ -90,9 +92,15 @@ data$weekmonth<-as.factor(data$weekmonth)
 data$daymont<-as.factor(data$daymont)
 data$weekdaymonth<-as.factor(data$weekdaymonth)
 
+data$children<-as.numeric(data$children)
+data$reserved_room_type<-as.factor(data$reserved_room_type)
+data$assigned_room_type<-as.factor(data$assigned_room_type)
+data$deposit_type<-as.factor(data$deposit_type)
+
+#AQUI AGREGAN FEAT ENG
+
 data
 }
-
 ```
 
 ## Preprocesamiento de estructura de bases de datos
@@ -123,11 +131,13 @@ set.seed(123)
 train<-prepare_data(train)
 test<-prepare_data(test)
 
+#summary(train)
 
 # aplico el one hot encoding
-newdata_train <-dummy_cols(train,split = T,remove_first_dummy = T)
-
-newdata_test <- dummy_cols(test,split = T,remove_first_dummy = T)
+newdata_train<-train
+#newdata_train <-dummy_cols(train,split = T)
+newdata_test<-test
+#newdata_test <- dummy_cols(test,split = T)
 ```
 
 
@@ -135,15 +145,12 @@ newdata_test <- dummy_cols(test,split = T,remove_first_dummy = T)
 
 ```{r}
 # De todas las mas de mil columnas, tomo un subset de tamaño x=99
-sample_train<-newdata_train %>% select(1:10)
-sample_test<-newdata_test %>% select(1:9)
+sample_train<-newdata_train #%>% select(1:100)
+sample_test<-newdata_test #%>% select(1:99)
+
 #Quito la columna de año por problematica a la hora de convertir a matriz esparsa
 sample_train$arrival_date_year<-NULL
 sample_test$arrival_date_year<-NULL
-# Quito los nas por ceros (debemos solucionar esto en el preprocesamiento)
-sample_train[is.na(sample_train)] <- 0
-sample_test[is.na(sample_test)] <- 0
-
 
 ```
 
@@ -151,6 +158,7 @@ sample_test[is.na(sample_test)] <- 0
 ## CV
 
 Ahora sobre el conjunto de entrenamiento guardaremos un cacho para probar.
+
 
 ```{r}
 # proporción que queremos de training
@@ -167,7 +175,6 @@ data_training <- sample_train[training_rows,]
 # la variable objetivo por separado
 data_validation <- sample_train[-training_rows,-1] #sin la y
 y <- sample_train[-training_rows,1] 
-
 ```
 
 
@@ -186,13 +193,15 @@ library(Matrix.utils)
 #Matriz de covariates
 #data_training<-sample_train
 Xa <-data_training %>% select(-1) #training menos y
-Xb <-equallevels(data_validation,Xa)
+Xb <-data_validation
 Xc <-equallevels(sample_test,Xa)
 
 #para manejo de nas, si lo quito, por alguna razon la conversion a matriz rala me quita unas obs
 
 options(na.action='na.pass')
 
+
+#summary(train)
 ```
 
 ### Matricez ralas

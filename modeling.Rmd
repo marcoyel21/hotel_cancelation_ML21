@@ -381,11 +381,11 @@ lasso_score <- predict(cvlasso_a,
 
 
 #dataframe
-A <- data.frame(y, lasso_score)
-colnames(A)[2] <- c('lasso_score')
+lasso_validation <- data.frame(y, lasso_score)
+colnames(lasso_validation)[2] <- c('lasso_score')
 
 library(MLmetrics)
-LogLoss(A$lasso_score,A$y)
+LogLoss(lasso_validation$lasso_score,lasso_validation$y)
 #0.3338948
 #0.3357558
 #0.3335033 k=7
@@ -428,9 +428,9 @@ lasso_score <- predict(cvlasso_a,
 
 length(lasso_score)
 #dataframe
-C <- data.frame(test_id, lasso_score)
-colnames(C) <- c('id','prob')
-write.csv(C,"submission.csv",row.names = F)
+lasso_test <- data.frame(test_id, lasso_score)
+colnames(lasso_test) <- c('id','prob')
+write.csv(lasso_test,"submission.csv",row.names = F)
 
 ```
 
@@ -496,13 +496,14 @@ stopCluster(cl)
 
 pred_rf<-predict(best_rf, data = (data_validation), type = "response")
 # añadir prediccion al data frame con las otras predicciones
-A <- data.frame(A,pred_rf$predictions)
-names(A)[] <- "rf_score"
+RF_validation <- data.frame(y,pred_rf$predictions)
+colnames(RF_validation) <- c('y','rf_scorey0','rf_scorey1')
 ```
 
 ### LOG LOSS test OOS
 ```{r}
-LogLoss(A$X2,A$y)
+#Aqui aguas porque no se porq pero a veces se corre para 1 y a veces para y=0
+LogLoss(RF_validation$rf_scorey1,RF_validation$y)
 ```
 
 ### output
@@ -515,10 +516,13 @@ pred_rf <- predict(best_rf,
 
 
 #dataframe
-RF <- data.frame(test_id, pred_rf$predictions)
-colnames(RF) <- c('id','proby0','prob')
-RF$proby0<-NULL
-write.csv(RF,"submission.csv",row.names = F)
+RF_test <- data.frame(test_id, pred_rf$predictions)
+colnames(RF_test) <- c('id','proby0','proby1')
+#dependiendo cual prob queramos eliminamos
+RF_test$proby0<-NULL
+colnames(RF_test) <- c('id','prob')
+
+write.csv(RF_test,"submission.csv",row.names = F)
 
 ```
 
@@ -548,7 +552,8 @@ xgb_model <- xgb.train(params = param, dtrain,
                  watchlist)
 # Predicción
 xgb_pred <- predict(xgb_model, Xb)
-XGpred<-data.frame(A, xgb_pred)
+XGpred<-data.frame(y, xgb_pred)
+colnames(XGpred)<-c("y","xgb_pred")
 ```
 Se muestran las evaluaciones del modelo, tanto in sample como out of sample, para las primeras y últimas iteraciones.
 
@@ -569,7 +574,7 @@ pred_xg <- predict(xgb_model,
 
 #dataframe
 XGpred_test <- data.frame(test_id, pred_xg)
-colnames(RF) <- c('id','prob')
+colnames(XGpred_test) <- c('id','prob')
 write.csv(XGpred_test,"submission.csv",row.names = F)
 
 ```

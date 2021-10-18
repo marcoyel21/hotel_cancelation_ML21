@@ -543,9 +543,12 @@ watchlist <- list(train = dtrain, eval = dtest)
 
 
 # Entrenamiento del modelo
+
 param <- list(max_depth = 6, learning_rate = 0.06, 
               objective = "binary:logistic",
               eval_metric = "logloss", subsample = 0.6, colsample_bytree = 0.7)
+
+
 xgb_model <- xgb.train(params = param, dtrain, 
                        early_stopping_rounds =  10, 
                        nrounds = 300,
@@ -555,6 +558,10 @@ xgb_pred <- predict(xgb_model, Xb)
 XGpred<-data.frame(y, xgb_pred)
 colnames(XGpred)<-c("y","xgb_pred")
 ```
+
+0.247118
+
+
 Se muestran las evaluaciones del modelo, tanto in sample como out of sample, para las primeras y últimas iteraciones.
 
 ```{r}

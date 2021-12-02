@@ -1,0 +1,564 @@
+---
+title: "EDA de Cancelaciones de Hotel"
+output:
+  html_document:
+    df_print: paged
+---
+#### Proyecto
+
+Cancelaciones en Hoteles
+Predecir cancelación de reservas en hoteles - AM 2021
+
+#### Descripción del problema
+
+Con el fin de planear tarifas y actividades de ventas o promoción, los hoteles hacen estimaciones adelantadas de su ocupación en cada día. Una parte de estas estimaciones requiere predecir cuántas de las reservaciones que ya se tienen van a terminar en cancelaciones, lo cual libera inventario que afecta en la planeación.
+
+#### Objetivo
+
+Predecir cuáles reservaciones son probables que terminen o no en cancelación.
+
+#### Fuente de datos
+
+Los datos que se utilizaron para este proyecto fueron obtenidos del sitio
+
+https://www.kaggle.com/c/cancelaciones-en-hoteles/data
+
+Los datos originales provienen de Hotel booking demand datasets, Antonio, de Almeida, Nunes (https://www.sciencedirect.com/science/article/pii/S2352340918315191)
+
+
+#### Variables
+
+|	Variable	|	Tipo	|	Descripción	|
+|	ADR	|	Numeric	|	Tarifa diaria promedio definida por [5]	|
+|	Adults	|	Integer	|	Número de Adultos	|
+|	Agent	|	Categorical	|	DNI de la agencia de viajes que realizó la reservaa	|
+|	ArrivalDateDayOfMonth	|	Integer	|	Día del mes de la fecha de llegada	|
+|	ArrivalDateMonth	|	Categorical	|	Mes de la fecha de llegada con 12 categorías: "enero" a "diciembre"	|
+|	ArrivalDateWeekNumber	|	Integer	|	Número de semana de la fecha de llegada	|
+|	ArrivalDateYear	|	Integer	|	Año de la fecha de llegada	|
+|	AssignedRoomType	|	Categorical	|	Código del tipo de habitación asignada a la reserva. A veces, el tipo de habitación asignada difiere del tipo de habitación reservada debido a razones de operación del hotel (por ejemplo, overbooking) o por solicitud del cliente. El código se presenta en lugar de la designación por razones de anonimato	|
+|	Babies	|	Integer	|	Numero de bebes	|
+|	BookingChanges	|	Integer	|	Número de cambios / modificaciones realizadas a la reserva desde el momento en que se ingresó la reserva en el PMS hasta el momento del check-in o la cancelación	|
+|	Children	|	Integer	|	Numero de niños	|
+|	Company	|	Categorical	|	DNI de la empresa / entidad que realizó la reserva o responsable del pago de la reserva. La identificación se presenta en lugar de la designación por razones de anonimato	|
+|	Country	|	Categorical	|	País de origen. Las categorías están representadas en el formato ISO 3155-3: 2013 [6]	|
+|	CustomerType	|	Categorical	|	Tipo de reserva, asumiendo una de cuatro categorías:	|
+|	DaysInWaitingList	|	Integer	|	Número de días que la reserva estuvo en lista de espera antes de que fuera confirmada al cliente	|
+|	DepositType	|	Categorical	|	Indicación sobre si el cliente realizó un depósito para garantizar la reserva. Esta variable puede asumir tres categorías:	|
+|	DistributionChannel	|	Categorical	|	Canal de distribución de reservas. El término "TA" significa "Agentes de viajes" y "TO" significa "Operadores turísticos"	|
+|	IsCanceled	|	Categorical	|	Valor que indica si la reserva fue cancelada (1) o no (0)	|
+|	IsRepeatedGuest	|	Categorical	|	Valor que indica si el nombre de la reserva fue de un huésped repetido (1) o no (0)	|
+|	LeadTime	|	Integer	|	Número de días transcurridos entre la fecha de entrada de la reserva en el PMS y la fecha de llegada	|
+|	MarketSegment	|	Categorical	|	Designación de segmento de mercado. En las categorías, el término "TA" significa "Agentes de viajes" y "TO" significa "Operadores turísticos"	|
+|	Meal	|	Categorical	|	Tipo de comida reservada. Las categorías se presentan en paquetes de comidas de hospitalidad estándar:	|
+|	PreviousBookingsNotCanceled	|	Integer	|	Número de reservas anteriores no canceladas por el cliente antes de la reserva actual	|
+|	PreviousCancellations	|	Integer	|	Número de reservas anteriores que fueron canceladas por el cliente antes de la reserva actual	|
+|	RequiredCardParkingSpaces	|	Integer	|	Número de plazas de aparcamiento requeridas por el cliente	|
+|	ReservationStatus	|	Categorical	|	Último estado de la reserva, asumiendo una de tres categorías:	|
+|	ReservationStatusDate	|	Date	|	Fecha en la que se estableció el último estado. Esta variable se puede utilizar junto con ReservationStatus para comprender cuándo se canceló la reserva o cuándo se registró el cliente en el hotel.	|
+|	ReservedRoomType	|	Categorical	|	Código del tipo de habitación reservado. El código se presenta en lugar de la designación por razones de anonimato	|
+|	StaysInWeekendNights	|	Integer	|	Número de noches de fin de semana (sábado o domingo) que el huésped se hospedó o reservó para alojarse en el hotel	|
+|	StaysInWeekNights	|	Integer	|	Número de noches de la semana (de lunes a viernes) que el huésped se hospedó o reservó para alojarse en el hotel	|
+|	TotalOfSpecialRequests	|	Integer	|	Número de solicitudes especiales realizadas por el cliente (por ejemplo, dos camas individuales o piso alto)	|
+
+
+### Analisis Exploratorio de Datos
+
+Con el fin de entender los datos realizamos una revisión general de estos y tratamos de identificar aquellas variables que pudieran ser interesantes para nuestro estudio
+
+
+```{r setup, include=FALSE, results="hide"}
+
+knitr::opts_chunk$set( echo = FALSE, message = FALSE, results = "hide" )
+
+library(tidyverse)
+library(Hmisc)
+library(skimr)
+library(naniar)
+library(patchwork)
+library(plotly)
+library(ggplot2)
+library(DataExplorer)
+library(knitr)
+library(reshape2)
+
+
+```
+
+
+```{r}
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+
+if(!require("PerformanceAnalytics")) install.packages("PerformanceAnalytics")
+if(!require("corrplot")) install.packages("corrplot")
+```
+
+
+```{r}
+
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+
+library(PerformanceAnalytics)
+library(corrplot)
+```
+
+#### Se leen los datos de Entrenamiento
+
+```{r echo = TRUE}
+data<-read.csv("entrena.csv",stringsAsFactors = F)
+```
+ 
+#### Se dividen los datos en tres conjuntos para usarse en los procesos de entrenamiento, prueba y calibración. con una proporción de 70%, 20% y 10%
+
+```{r echo = TRUE, results='hide'}
+knitr::opts_chunk$set( message = FALSE, results='hide')
+idx <- sample(seq(1, 3), size = nrow(data), replace = TRUE, prob = c(.7, 2, .1))
+train <- data[idx == 1,]
+test <- data[idx == 2,]
+cal <- data[idx == 3,]
+
+```
+
+#### Usamos la función skim en la base de datos de entrenamiento para conocer las características generales de cada variable 
+
+```{r echo = TRUE, results = 'show'}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, results = 'show')
+skim(train)
+```
+Podemos observar que tenemos 13 variables categorías, de las cuales podemos destacar que 3 tienen un número alto de categorías (country, agent, company)
+
+Tenemos 17 variables numéricas. 
+
+En este primer acercamiento, podemos identificar que las variables corresponden a:
+
+variables de tiempo: tiempo previo de reservación, fechas de llegada, duración de la reservación.
+
+características de reservación: agencia, país, canal de distribución, segmento de mercado, tipo de depósito, tarifa diaria
+
+características de los clientes y sus preferencias: adultos, bebes, tipo de hotel, tipo de habitación
+
+
+#### Revisamos la proporción de la variable objetivo
+
+```{r}
+a <- table(train$is_canceled)
+prop <- prop.table(a)
+prop
+```
+
+#### Extraemos el subconjunto de cancelados para hacer una revisión de todas las variables con respecto a las reservaciónes canceladas.
+
+```{r}
+
+sub_cancelados <- subset(train, is_canceled == "cancelado")
+```
+
+#### Iniciamos con la revisión de los histogramas de cada variable para ver si podemos identificar algun compartamiento interesante 
+
+#### Creamos una funcion para que grafique el histograma en forma ordenada de mayora menor para todas las variables
+
+```{r}
+analisis_cancelaciones_ord <- function(datos,nombre) {
+x <- table(datos)
+cancel <- x[order(x,decreasing = TRUE)]
+par(cex=0.5) #control size of labels
+g_1 <- barplot(cancel, main = nombre)
+  return(g_1)
+}
+```
+
+
+#### Extraemos el nombre de todas las variables del subconjunto cancelado y se la pasamos a la funcion para su graficación 
+
+
+```{r}
+ncol(sub_cancelados) 
+nombres <- names(sub_cancelados)
+for (i in c(1:ncol(sub_cancelados))){
+analisis_cancelaciones_ord(sub_cancelados[,i],nombres[i])
+}
+```
+
+#### Resultado de histogramas
+
+Después de revisar cada uno de los histogramas encontramos que:
+
+Hotel: hay una proporción considerablemente mayor de cancelaciones en la categoría City
+
+**Lead_time:** la distribución de sus datos no tiene un comportamiento lógico, porque el mayor número de cancelaciones proviene de o días previos de reservación, pero luego se mueve a valores de 90 días, 40 días y luego regresa a 2 días. será importante ver si existe algún patrón en esta variable
+
+arrival_date: observamos que la mayoría de los datos provienen de 2016 y muy pocos de 2017. nos hace pensar que la muestra fue tomada a partir de un mes intermedio de 2015 y cortada en un mes intermedio de 2017
+
+arrival_data_month: los meses de mayores cancelaciones fueron en octubre, septiembre, marzo, febrero que coinciden con los periodos vacacionales de muchos países y con semana santa o “spring break”, esto nos sugiere hacer un análisis de serie de tiempo para determinar si existe algún componente estacional.
+
+Adults: la mayor cancelación proviene de 2 y 1 adulto, lo que puede hacernos pensar que pueden ser reservaciones para viajes de trabajo. también es importante considerar que en muchos hoteles las habitaciones son de máximo 3 ocupantes. 
+
+children y babies: la mayor concentración es de cero y puede reforzar el supuesto de adultos. 
+
+reserver_room_type y Assigned_room_type: los valores de las categorías están reservados por privacidad por lo que no se puede interpretar claramente esta variable, sin embargo, ambas están asocias a la categoría A. podríamos pensar que serían las estándar de 2 personas siguiendo el supuesto que las cancelaciones son mayormente por tipo de viaje de trabajo.
+
+**Country:** esta variable presenta un dato totalmente atípico en la categoría PRT por lo que es importante considerarla ya que podría explicar una porción importante de las cancelaciones.
+
+market_segment y distribution_channel: estas variables están relacionadas y tiene un sesgo a la categorías asociadas a las agencias de viajes y hechas online
+
+**Deposit_type:** aqui hay otro caso ilógico, ya que la categoría de no rembolsable está muy por arriba de los rembolsable, uno pensaría que debería ser menos frecuenta la cancelación si no te van a devolver tu dinero. por lo que es otra variable importante.
+
+**agent:** podría ser otra variable interesante porque el agente 9 tiene muchas cancelaciones
+
+customer_type. la categoría con más reservaciones es Transient que es cuando la reserva no es parte de un grupo o contrato, y no asociado a otras reservas transitorias
+
+Adr. es otra variable que puede ser interesante porque tiene una frecuencia muy alta en el valor 62. se puede hacer el supuesto que es promedio de la mayoría de las habitaciones dobles. siguen el supuesto anterior.
+
+las demás variables no proporcionan información de mayor interés en esta primera revisión.
+
+
+#### Primera revisión de varables interesantes
+
+Primero revisamos si hay alguna relacion entre las variables interesantes
+
+##### Analisando la variable deposit_type
+
+se extrae el subset de deposit_type cancelados
+
+```{r}
+
+sub_rembolso <- subset(sub_cancelados, deposit_type == "Non Refund")
+```
+
+revisamos los porcentajes de cada catagoria en las otras variables
+
+
+```{r}
+a <- table(sub_rembolso$country)
+prop <- prop.table(a)
+prop
+```
+
+## Hallazgo 1 observamos que el 97% de las cancelaciones sin rembolso pertenecen al país PRT
+
+
+```{r}
+a <- table(sub_rembolso$agent)
+prop <- prop.table(a)
+prop
+```
+
+obsevamos que el 34% de las cancelaciones sin rembolso son del agente 1
+
+#### Analisando la variable agent
+
+Revisamos el subset de agentes cancelados
+
+```{r}
+a <- table(sub_cancelados$agent)
+prop <- prop.table(a)
+prop
+```
+
+obsevamos que el 16% de las cancelaciones sin rembolso son del agente 1
+
+
+se extrae el subset del agente 1 cancelados
+
+```{r}
+
+sub_agent <- subset(sub_cancelados, agent == "1")
+```
+
+```{r}
+a <- table(sub_agent$country)
+prop <- prop.table(a)
+prop
+```
+
+tambien observamos una relacion entre el agente 1 y el pais PRT
+
+
+##### Analisando la variable county
+
+se extrae el subset de county cancelados
+
+```{r}
+sub_country <- subset(sub_cancelados, country == "PRT")
+```
+
+revisamos los porcentajes de cada catagoria en las otras variables
+
+
+```{r}
+a <- table(sub_country$agent)
+prop <- prop.table(a)
+prop
+```
+
+#### el 23 porciento de las reservaciones del pais PRT fueron realizadas con el agente 1
+
+
+###  Primeras conclusiones 
+
+### las variables deposit_type, county y agent tienen una relacion directa entre el pais PRT, el agente 1 y reservacion sin rembolso
+
+
+## Analisis de serie de tiempo
+
+
+```{r setup, include=FALSE, results="hide"}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+library(tidyverse)
+library(Hmisc)
+library(skimr)
+library(naniar)
+library(patchwork)
+library(plotly)
+library(ggplot2)
+library(DataExplorer)
+library(knitr)
+library(reshape2)
+library(lubridate)
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+if(!require("PerformanceAnalytics")) install.packages("PerformanceAnalytics")
+if(!require("corrplot")) install.packages("corrplot")
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, results='hide')
+library(PerformanceAnalytics)
+library(corrplot)
+```
+
+# leo datos
+
+
+
+```{r echo = TRUE}
+data<-read.csv("entrena.csv",stringsAsFactors = F)
+```
+ 
+ 
+# dias de la semana
+
+
+```{r}
+fecha = ymd(paste(data$arrival_date_year,data$arrival_date_month,data$arrival_date_day_of_month))
+
+data <- data %>% mutate(dia_sem = wday(fecha))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==1, "domingo", as.character(dia_sem)))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==2, "lunes", as.character(dia_sem)))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==3, "martes", as.character(dia_sem)))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==4, "miercoles", as.character(dia_sem)))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==5, "jueves", as.character(dia_sem)))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==6, "viernes", as.character(dia_sem)))
+data <- data %>% mutate(dia_sem = if_else(dia_sem==7, "sabado", as.character(dia_sem)))
+```
+
+
+# pascuas
+```{r, echo = FALSE}
+pascua <- ymd(as.character(timeDate::Easter(2015:2017)))
+pascua_m1 <- ymd(as.character(timeDate::Easter(2015:2017))) - days(1)
+pascua_m2 <- ymd(as.character(timeDate::Easter(2015:2017))) - days(2)
+pascua_m3 <- ymd(as.character(timeDate::Easter(2015:2017))) - days(3)
+pascua_m4 <- ymd(as.character(timeDate::Easter(2015:2017))) - days(4)
+pascua_m5 <- ymd(as.character(timeDate::Easter(2015:2017))) - days(5)
+pascua_m6 <- ymd(as.character(timeDate::Easter(2015:2017))) - days(6)
+
+data <- data %>% mutate(fecha = fecha)
+data$pascua <- as.numeric(data$fecha %in% pascua)
+data$pascua_m1 <- as.numeric(data$fecha %in% pascua_m1)
+data$pascua_m2 <- as.numeric(data$fecha %in% pascua_m2)
+data$pascua_m3 <- as.numeric(data$fecha %in% pascua_m3)
+data$pascua_m4 <- as.numeric(data$fecha %in% pascua_m4)
+data$pascua_m5 <- as.numeric(data$fecha %in% pascua_m5)
+data$pascua_m6 <- as.numeric(data$fecha %in% pascua_m6)
+data<- data %>% mutate(semana_santa = pascua + pascua_m1 +
+                                      pascua_m2 + pascua_m3 + pascua_m4 + pascua_m5 + 
+                         pascua_m6)
+```
+
+ 
+ 
+# Creo las 3 bases
+```{r echo = TRUE, results='hide'}
+knitr::opts_chunk$set( message = FALSE, results='hide')
+idx <- sample(seq(1, 3), size = nrow(data), replace = TRUE, prob = c(.7, 2, .1))
+train <- data[idx == 1,]
+test <- data[idx == 2,]
+cal <- data[idx == 3,]
+
+```
+
+
+```{r}
+
+cancelados <- subset(train, is_canceled == "cancelado")
+```
+
+
+```{r}
+cuenta <- cancelados %>% group_by(fecha) %>% count(is_canceled) 
+```
+
+
+```{r}
+agrupados <- tibble(cuenta)
+```
+
+
+```{r}
+ggplot(agrupados, aes(x = fecha, y=n))+
+geom_point() +
+  geom_smooth(method = "loess", span = 0.5, method.args = list(degree = 1), se = FALSE)
+```
+
+
+
+
+```{r}
+mod_1 <- loess(n ~ as.numeric(fecha), data = agrupados, span = 0.5, degree = 1)
+agrupados <- agrupados %>% mutate(ajuste_1 = fitted(mod_1)) %>%
+    mutate(res_1 = n - ajuste_1)
+```
+
+```{r}
+mod_anual <- loess(res_1 ~ as.numeric(fecha), data = agrupados, degree = 1, span = 0.1)
+agrupados <- agrupados %>% mutate(ajuste_2 = fitted(mod_anual)) %>%
+    mutate(res_2 = res_1 - ajuste_2)
+```
+
+```{r, echo = FALSE, fig.height=2.5, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(agrupados, aes(x = fecha)) +
+    geom_point(aes(y = res_1), alpha = 0.2, size = 1) +
+    geom_line(aes(y = ajuste_2), colour = "red", size = 1.2)
+```
+
+
+```{r}
+
+agrupados <- agrupados %>% mutate(dia_sem = wday(fecha))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==1, "domingo", as.character(dia_sem)))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==2, "lunes", as.character(dia_sem)))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==3, "martes", as.character(dia_sem)))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==4, "miercoles", as.character(dia_sem)))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==5, "jueves", as.character(dia_sem)))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==6, "viernes", as.character(dia_sem)))
+agrupados <- agrupados %>% mutate(dia_sem = if_else(dia_sem==7, "sabado", as.character(dia_sem)))
+```
+
+```{r}
+agrupados <- agrupados %>%
+    group_by(dia_sem) %>%
+    nest() %>%
+    mutate(ajuste_mod =
+      map(data, ~ loess(res_2 ~ as.numeric(fecha), data = .x, span = 0.1, degree = 1))) %>%
+    mutate(ajuste_3 =  map(ajuste_mod, fitted)) %>%
+    select(-ajuste_mod) %>% unnest(cols = c(data, ajuste_3)) %>%
+    mutate(res_3 = res_2 - ajuste_3) %>% ungroup
+```
+
+```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(agrupados, aes(x = fecha)) +
+    geom_point(aes(y = res_2), alpha = 0.5, colour = "gray") +
+    geom_line(aes(y = ajuste_3, colour = dia_sem), size = 1) +
+    xlab("")
+```
+
+
+
+```{r, fig.height=2.5, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(agrupados, aes(x = fecha, y = res_3)) +
+    geom_line() +
+    geom_smooth(method = "loess", span = 0.02,
+                method.args = list(degree=1, family = "symmetric"))
+```
+
+
+```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(agrupados, aes(sample = res_3)) +
+  geom_qq(distribution = stats::qunif) +
+  ylab("cancelaciones (residual)") + xlab("")
+```
+
+
+```{r}
+datos_dia <-  agrupados
+```
+
+
+
+
+```{r}
+# Quitamos componente anual y efecto de día de la semana
+datos_dia <- datos_dia %>% mutate(n_1 = n - ajuste_2 - ajuste_3)
+# Reajustamos
+mod_1 <- loess(n_1 ~ as.numeric(fecha), data = datos_dia, span = 0.02, degree = 2,
+               family = "symmetric")
+```
+
+```{r, echo = FALSE,fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+datos_dia <- datos_dia %>% ungroup %>%
+    mutate(ajuste_4 = fitted(mod_1)) %>%
+    mutate(res_4 = n - ajuste_4) %>%
+    mutate(n_2 = n - ajuste_4 - ajuste_3)
+ggplot(datos_dia, aes(x = fecha)) +
+    geom_point(aes(y = n_1), alpha = 0.3, size = 1) +
+    geom_line(aes(y = ajuste_4), colour = "red", size = 1)
+```
+
+
+```{r, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+mod_anual <- loess(n_2 ~ as.numeric(fecha), data = datos_dia,
+               degree = 2,  span = 0.01, family = "symmetric")
+datos_dia <- datos_dia %>%
+    mutate(ajuste_5 = fitted(mod_anual)) %>%
+    mutate(res_5 = n_2 - ajuste_5) %>%
+    mutate(n_3 = n - ajuste_4 - ajuste_5)
+```
+
+```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(datos_dia, aes(x = fecha)) +
+    geom_point(aes(y = n_2), alpha = 0.2, size = 1) +
+    geom_line(aes(y = ajuste_5), colour = "red", size = 1)
+```
+
+Y ahora repetimos con la componente de día de la semana:
+
+```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+datos_dia <- datos_dia %>% group_by(dia_sem) %>% nest() %>%
+    mutate(ajuste_mod = map(data, ~ loess(n_3 ~ as.numeric(fecha), data = .x, span = 0.1,
+                                          degree=1, family = "symmetric"))) %>%
+    mutate(ajuste_6 =  map(ajuste_mod, fitted)) %>%
+    select(-ajuste_mod) %>%
+    unnest(cols = c(data, ajuste_6)) %>%
+    mutate(res_6 = n_3 - ajuste_6)
+ggplot(datos_dia, aes(x = fecha, y = n_3, group = dia_sem)) +
+  geom_point(aes(y = n_3), alpha = 0.2, size = 1)  +
+    geom_line(aes(y = ajuste_6, colour = dia_sem), size =1)
+```
+
+### Análisis de componentes {-}
+
+Ahora comparamos las componentes estimadas y los residuales en una misma
+gráfica. Por definición, la suma de todas estas componentes da los datos
+originales.
+
+```{r, fig.width =7, fig.height = 7, cache = TRUE, echo = FALSE,  out.width = '90%', fig.align= 'center'}
+media <- mean(datos_dia$n) %>% round
+datos_l <- datos_dia %>%
+    select(fecha, dia_sem, n, ajuste_4, ajuste_5, ajuste_6, res_6) %>%
+    mutate(ajuste_4_centrado = ajuste_4 - mean(ajuste_4)) %>%
+    gather(componente, valor, ajuste_5:ajuste_4_centrado) %>%
+    mutate(componente = recode(componente, ajuste_4_centrado="Tendencia", ajuste_5 = "Anual", ajuste_6 = "Día de la semana",
+                               res_6 = "Residual")) %>%
+    mutate(componente = fct_relevel(componente, "Tendencia", "Anual", "Día de la semana", "Residual"))
+ggplot(datos_l, aes(x = fecha, y = valor, colour = dia_sem)) +
+    facet_wrap(~ componente,  ncol = 1) +
+    geom_point(size=0.5) + 
+    labs(caption = "Media total: 6435")
+
+```

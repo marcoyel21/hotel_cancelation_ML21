@@ -111,7 +111,7 @@ El data set está compuesto por las siguientes variables:
 
 ```{r, include = FALSE}
 
-a <- table(data$is_canceled)
+a <- table(train$is_canceled)
 prop <- prop.table(a)
 prop
 ```
@@ -119,7 +119,7 @@ Nuestra variable de interés es **IsCanceled** la cual toma valores de 1 (fue ca
 
 |Cancelado| No cancelado|
 |:---:|:---:|
-|0.3579115| 0.6420885 |
+|0.3620854| 0.6379146 |
 
 Usamos la función skim en la base de datos de entrenamiento para conocer las características generales de cada variable.
 ```{r, message = FALSE, echo=FALSE}
@@ -143,7 +143,7 @@ Podemos observar que:
 Ahora extraemos el subconjunto de cancelados para hacer una revisión de todas las variables con respecto a las reservaciónes canceladas.
 
 ```{r}
-sub_cancelados <- subset(data, is_canceled == "cancelado")
+sub_cancelados <- subset(train, is_canceled == "cancelado")
 ```
 Iniciamos con la revisión de los histogramas de cada variable para ver si podemos identificar algun compartamiento interesante. A continuación se muestran los histogramas de las variables más interesantes a nuestro criterio, nuevamente puede consultar la exploración completa de los datos en [EDA](https://github.com/marcoyel21/hotel_cancelation_ML21/blob/main/final/EDA_Cancelaciones.Rmd).
 
@@ -164,7 +164,8 @@ plot_grid(hist1, hist2 ,
           labels = c("A", "B"),
           ncol = 2, nrow = 1)
 ```
-
+**Agregar comparacion poblaciones** ##########################################
+#################################################
 
 **Country:** esta variable presenta un dato totalmente atípico en la categoría PRT por lo que es importante considerarla ya que podría explicar una porción importante de las cancelaciones.
 
@@ -194,6 +195,9 @@ a <- table(sub_rembolso$country)
 prop <- prop.table(a)
 prop
 ```
+
+**Joel** añadir descubrimientos agent 1 portugal discucsión 
+
 
 ### Análisis de tendenciás en el tiempo EDA
 
@@ -339,6 +343,20 @@ ggplot(datos_l, aes(x = fecha, y = valor, colour = dia_sem)) +
     geom_point(size=0.5) + 
     labs(caption = "Media total: 6435")
 ```
+**Joel** Analisis días de la semana
+
+```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(agrupados, aes(x = fecha)) +
+    geom_point(aes(y = res_2), alpha = 0.5, colour = "gray") +
+    geom_line(aes(y = ajuste_3, colour = dia_sem), size = 1) +
+    xlab("")
+```
+**Joel** Picos durante el año 
+```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
+ggplot(datos_dia, aes(x = fecha)) +
+    geom_point(aes(y = n_2), alpha = 0.2, size = 1) +
+    geom_line(aes(y = ajuste_5), colour = "red", size = 1)
+```
 
 
 ## Preparación de los Datos 
@@ -356,6 +374,8 @@ Para el preprocesamiento de datos se agregaron variables que pensamos serían de
 
 
 * **mag_tasa_can**: Proporciona el ratio entre el total de cancelaciones respecto al total de reservaciones.
+
+* **COMBINACIONES aleatorias**: Incorporamos estas variables de combinaciones al azar buscando interaciones que ayudaran al modelo. 
 
 ```{r, echo=FALSE, include = FALSE}
 #SE CARGAN LOS DATOS
@@ -571,7 +591,9 @@ Para el procesamiento de los datos previo al modelaje se hizo [one hot encoding]
 
 ### Primer modelo: Regression Logistica con LASO
 
+
 ### Random Forest 
+
 
 
 ## Conclusiones

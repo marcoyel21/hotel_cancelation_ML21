@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation</title>
+  <meta name="description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation" />
+  
+  <meta name="twitter:description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  
+
+<meta name="author" content="Alex Joel Marco" />
+
+
+<meta name="date" content="2021-12-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="preparación-de-los-datos.html"/>
+<link rel="next" href="conclusiones.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#proyecto"><i class="fa fa-check"></i><b>1.1</b> Proyecto</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#descripción-del-problema"><i class="fa fa-check"></i><b>1.2</b> Descripción del problema</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo"><i class="fa fa-check"></i><b>1.3</b> Objetivo</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#fuente-de-datos"><i class="fa fa-check"></i><b>1.4</b> Fuente de datos</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#ambiente"><i class="fa fa-check"></i><b>1.5</b> Ambiente</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html"><i class="fa fa-check"></i><b>2</b> Analisis Exploratorio de Datos</a>
+<ul>
+<li class="chapter" data-level="2.0.1" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#cancelaciones-eda"><i class="fa fa-check"></i><b>2.0.1</b> Cancelaciones EDA</a></li>
+<li class="chapter" data-level="2.0.2" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#análisis-de-tendenciás-en-el-tiempo-eda"><i class="fa fa-check"></i><b>2.0.2</b> Análisis de tendenciás en el tiempo EDA</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html"><i class="fa fa-check"></i><b>3</b> Preparación de los Datos</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#preprocesamiento"><i class="fa fa-check"></i><b>3.0.1</b> Preprocesamiento</a></li>
+<li class="chapter" data-level="3.0.2" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#ingeniería-de-caracterísitcas"><i class="fa fa-check"></i><b>3.0.2</b> Ingeniería de caracterísitcas</a></li>
+<li class="chapter" data-level="3.1" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#cv"><i class="fa fa-check"></i><b>3.1</b> CV</a></li>
+<li class="chapter" data-level="3.2" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#nivelación-de-variables"><i class="fa fa-check"></i><b>3.2</b> Nivelación de variables</a></li>
+<li class="chapter" data-level="3.3" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#matrices-ralas"><i class="fa fa-check"></i><b>3.3</b> Matrices RALAS</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>4</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="modeling.html"><a href="modeling.html#cross-validated-lasso-logit"><i class="fa fa-check"></i><b>4.1</b> Cross-Validated LASSO-logit</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="modeling.html"><a href="modeling.html#grafica-lasso-de-los-coeficientes-vs-la-complejidad-del-modelo."><i class="fa fa-check"></i><b>4.1.1</b> Grafica Lasso de los coeficientes vs la complejidad del modelo.</a></li>
+<li class="chapter" data-level="4.1.2" data-path="modeling.html"><a href="modeling.html#hiper-parametro"><i class="fa fa-check"></i><b>4.1.2</b> Hiper parametro</a></li>
+<li class="chapter" data-level="4.1.3" data-path="modeling.html"><a href="modeling.html#variables"><i class="fa fa-check"></i><b>4.1.3</b> Variables</a></li>
+<li class="chapter" data-level="4.1.4" data-path="modeling.html"><a href="modeling.html#log-loss-test-oos"><i class="fa fa-check"></i><b>4.1.4</b> LOG LOSS test OOS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="modeling.html"><a href="modeling.html#xgboosting"><i class="fa fa-check"></i><b>4.2</b> XGBOOSTING</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>5</b> Conclusiones</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyecto Final: Hotel Cancelation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="modeling" class="section level1" number="4">
+<h1><span class="header-section-number">Capitulo 4</span> Modeling</h1>
+<p>En esta parte aplicaremos dos modelos: un Lasso-Logit y un XGboosting.</p>
+<div id="cross-validated-lasso-logit" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Cross-Validated LASSO-logit</h2>
+<p>Seestima un cross validated LASSO y se muestra el la gráfica de CV Binomial Deviance vs Complejidad</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="modeling.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#CV LASSO</span></span>
+<span id="cb9-2"><a href="modeling.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># se hacen 5 folds </span></span>
+<span id="cb9-3"><a href="modeling.html#cb9-3" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="ot">&lt;-</span><span class="fu">cv.gamlr</span>(<span class="at">x =</span> Xa, <span class="at">y =</span> Ya, <span class="at">verb =</span> T, <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>, <span class="at">nfold =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## Warning in gamlr(x, y, ...): numerically perfect fit for some observations.</code></pre>
+<pre><code>## fold 1,2,3,4,5,done.</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="modeling.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Grafica</span></span>
+<span id="cb12-2"><a href="modeling.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a)</span></code></pre></div>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div id="grafica-lasso-de-los-coeficientes-vs-la-complejidad-del-modelo." class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Grafica Lasso de los coeficientes vs la complejidad del modelo.</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="modeling.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a<span class="sc">$</span>gamlr)</span></code></pre></div>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+<div id="hiper-parametro" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Hiper parametro</h3>
+<p>Automaticamente se elige el lambda que minimiza la devianza OOS.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modeling.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificador para el lambda deseado</span></span>
+<span id="cb14-2"><a href="modeling.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Valor del lambda deseado</span></span>
+<span id="cb14-3"><a href="modeling.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#lambda resultante</span></span>
+<span id="cb14-4"><a href="modeling.html#cb14-4" aria-hidden="true" tabindex="-1"></a>a_lambda<span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>))</span>
+<span id="cb14-5"><a href="modeling.html#cb14-5" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="sc">$</span>gamlr<span class="sc">$</span>lambda[a_lambda]</span></code></pre></div>
+<pre><code>##     seg100 
+## 0.00243361</code></pre>
+</div>
+<div id="variables" class="section level3" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Variables</h3>
+<p>A continuacion una tabla con los coeficientes que se selecciona para el CV LASSO. Que sorprendentemente solo fueron 561.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="modeling.html#cb16-1" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>, <span class="at">k=</span><span class="dv">2</span>, <span class="at">corrected=</span><span class="cn">TRUE</span>)</span>
+<span id="cb16-2"><a href="modeling.html#cb16-2" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(coefs[,<span class="dv">1</span>])</span>
+<span id="cb16-3"><a href="modeling.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(coefs)<span class="ot">&lt;-</span><span class="st">&quot;valor&quot;</span></span>
+<span id="cb16-4"><a href="modeling.html#cb16-4" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span>coefs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(valor <span class="sc">!=</span><span class="dv">0</span>)</span>
+<span id="cb16-5"><a href="modeling.html#cb16-5" aria-hidden="true" tabindex="-1"></a>modelvariables<span class="ot">&lt;-</span><span class="fu">row.names</span>(coefs)</span>
+<span id="cb16-6"><a href="modeling.html#cb16-6" aria-hidden="true" tabindex="-1"></a>modelvariables</span></code></pre></div>
+<pre><code>##   [1] &quot;intercept&quot;                     &quot;lead_time&quot;                    
+##   [3] &quot;arrival_date_year2015&quot;         &quot;arrival_date_year2017&quot;        
+##   [5] &quot;arrival_date_monthDecember&quot;    &quot;arrival_date_monthJune&quot;       
+##   [7] &quot;arrival_date_week_number9&quot;     &quot;arrival_date_week_number19&quot;   
+##   [9] &quot;arrival_date_day_of_month22&quot;   &quot;stays_in_weekend_nights&quot;      
+##  [11] &quot;stays_in_week_nights&quot;          &quot;adults&quot;                       
+##  [13] &quot;mealHB&quot;                        &quot;mealUndefined&quot;                
+##  [15] &quot;countryAGO&quot;                    &quot;countryARE&quot;                   
+##  [17] &quot;countryAUT&quot;                    &quot;countryBEL&quot;                   
+##  [19] &quot;countryBGD&quot;                    &quot;countryBRA&quot;                   
+##  [21] &quot;countryCHN&quot;                    &quot;countryCPV&quot;                   
+##  [23] &quot;countryCYP&quot;                    &quot;countryDEU&quot;                   
+##  [25] &quot;countryESP&quot;                    &quot;countryFIN&quot;                   
+##  [27] &quot;countryFRA&quot;                    &quot;countryGAB&quot;                   
+##  [29] &quot;countryGBR&quot;                    &quot;countryGEO&quot;                   
+##  [31] &quot;countryGLP&quot;                    &quot;countryHKG&quot;                   
+##  [33] &quot;countryHND&quot;                    &quot;countryIDN&quot;                   
+##  [35] &quot;countryIRL&quot;                    &quot;countryITA&quot;                   
+##  [37] &quot;countryJEY&quot;                    &quot;countryJPN&quot;                   
+##  [39] &quot;countryKOR&quot;                    &quot;countryMAC&quot;                   
+##  [41] &quot;countryMAR&quot;                    &quot;countryMDV&quot;                   
+##  [43] &quot;countryNGA&quot;                    &quot;countryNLD&quot;                   
+##  [45] &quot;countryNOR&quot;                    &quot;countryPAK&quot;                   
+##  [47] &quot;countryPAN&quot;                    &quot;countryPOL&quot;                   
+##  [49] &quot;countryPRT&quot;                    &quot;countryQAT&quot;                   
+##  [51] &quot;countryRUS&quot;                    &quot;countrySAU&quot;                   
+##  [53] &quot;countrySEN&quot;                    &quot;countrySRB&quot;                   
+##  [55] &quot;countrySWE&quot;                    &quot;countryTJK&quot;                   
+##  [57] &quot;countryTUR&quot;                    &quot;countryZAF&quot;                   
+##  [59] &quot;market_segment8&quot;               &quot;distribution_channel5&quot;        
+##  [61] &quot;is_repeated_guest&quot;             &quot;reserved_room_typeE&quot;          
+##  [63] &quot;reserved_room_typeP&quot;           &quot;assigned_room_typeB&quot;          
+##  [65] &quot;assigned_room_typeI&quot;           &quot;assigned_room_typeP&quot;          
+##  [67] &quot;booking_changes&quot;               &quot;deposit_typeB&quot;                
+##  [69] &quot;agent10&quot;                       &quot;agent107&quot;                     
+##  [71] &quot;agent11&quot;                       &quot;agent110&quot;                     
+##  [73] &quot;agent118&quot;                      &quot;agent13&quot;                      
+##  [75] &quot;agent132&quot;                      &quot;agent134&quot;                     
+##  [77] &quot;agent14&quot;                       &quot;agent151&quot;                     
+##  [79] &quot;agent152&quot;                      &quot;agent155&quot;                     
+##  [81] &quot;agent157&quot;                      &quot;agent16&quot;                      
+##  [83] &quot;agent168&quot;                      &quot;agent17&quot;                      
+##  [85] &quot;agent191&quot;                      &quot;agent214&quot;                     
+##  [87] &quot;agent215&quot;                      &quot;agent22&quot;                      
+##  [89] &quot;agent220&quot;                      &quot;agent23&quot;                      
+##  [91] &quot;agent234&quot;                      &quot;agent240&quot;                     
+##  [93] &quot;agent241&quot;                      &quot;agent242&quot;                     
+##  [95] &quot;agent243&quot;                      &quot;agent251&quot;                     
+##  [97] &quot;agent26&quot;                       &quot;agent262&quot;                     
+##  [99] &quot;agent27&quot;                       &quot;agent281&quot;                     
+## [101] &quot;agent288&quot;                      &quot;agent291&quot;                     
+## [103] &quot;agent308&quot;                      &quot;agent314&quot;                     
+## [105] &quot;agent315&quot;                      &quot;agent32&quot;                      
+## [107] &quot;agent332&quot;                      &quot;agent341&quot;                     
+## [109] &quot;agent359&quot;                      &quot;agent38&quot;                      
+## [111] &quot;agent390&quot;                      &quot;agent40&quot;                      
+## [113] &quot;agent410&quot;                      &quot;agent440&quot;                     
+## [115] &quot;agent56&quot;                       &quot;agent6&quot;                       
+## [117] &quot;agent63&quot;                       &quot;agent7&quot;                       
+## [119] &quot;agent75&quot;                       &quot;agent8&quot;                       
+## [121] &quot;agent86&quot;                       &quot;agent89&quot;                      
+## [123] &quot;agent9&quot;                        &quot;agent94&quot;                      
+## [125] &quot;company102&quot;                    &quot;company110&quot;                   
+## [127] &quot;company112&quot;                    &quot;company153&quot;                   
+## [129] &quot;company154&quot;                    &quot;company204&quot;                   
+## [131] &quot;company218&quot;                    &quot;company242&quot;                   
+## [133] &quot;company253&quot;                    &quot;company270&quot;                   
+## [135] &quot;company277&quot;                    &quot;company309&quot;                   
+## [137] &quot;company316&quot;                    &quot;company321&quot;                   
+## [139] &quot;company350&quot;                    &quot;company38&quot;                    
+## [141] &quot;company39&quot;                     &quot;company392&quot;                   
+## [143] &quot;company40&quot;                     &quot;company405&quot;                   
+## [145] &quot;company410&quot;                    &quot;company416&quot;                   
+## [147] &quot;company461&quot;                    &quot;company470&quot;                   
+## [149] &quot;company478&quot;                    &quot;company504&quot;                   
+## [151] &quot;company51&quot;                     &quot;company68&quot;                    
+## [153] &quot;company72&quot;                     &quot;company77&quot;                    
+## [155] &quot;companyNULL&quot;                   &quot;customer_typeTransient&quot;       
+## [157] &quot;adr&quot;                           &quot;required_car_parking_spaces&quot;  
+## [159] &quot;total_of_special_requests&quot;     &quot;dia_semmiercoles&quot;             
+## [161] &quot;dia_semviernes&quot;                &quot;pascua_m1&quot;                    
+## [163] &quot;agent_company107_NULL&quot;         &quot;agent_company11_NULL&quot;         
+## [165] &quot;agent_company110_NULL&quot;         &quot;agent_company118_NULL&quot;        
+## [167] &quot;agent_company13_NULL&quot;          &quot;agent_company134_NULL&quot;        
+## [169] &quot;agent_company151_NULL&quot;         &quot;agent_company152_NULL&quot;        
+## [171] &quot;agent_company155_NULL&quot;         &quot;agent_company17_NULL&quot;         
+## [173] &quot;agent_company191_NULL&quot;         &quot;agent_company21_NULL&quot;         
+## [175] &quot;agent_company214_NULL&quot;         &quot;agent_company234_NULL&quot;        
+## [177] &quot;agent_company240_NULL&quot;         &quot;agent_company242_NULL&quot;        
+## [179] &quot;agent_company262_NULL&quot;         &quot;agent_company281_NULL&quot;        
+## [181] &quot;agent_company291_NULL&quot;         &quot;agent_company314_NULL&quot;        
+## [183] &quot;agent_company315_NULL&quot;         &quot;agent_company32_NULL&quot;         
+## [185] &quot;agent_company332_NULL&quot;         &quot;agent_company341_NULL&quot;        
+## [187] &quot;agent_company38_NULL&quot;          &quot;agent_company390_NULL&quot;        
+## [189] &quot;agent_company410_NULL&quot;         &quot;agent_company440_NULL&quot;        
+## [191] &quot;agent_company56_NULL&quot;          &quot;agent_company8_NULL&quot;          
+## [193] &quot;agent_company86_NULL&quot;          &quot;agent_company9_NULL&quot;          
+## [195] &quot;agent_company94_NULL&quot;          &quot;agent_companyNULL_102&quot;        
+## [197] &quot;agent_companyNULL_110&quot;         &quot;agent_companyNULL_112&quot;        
+## [199] &quot;agent_companyNULL_153&quot;         &quot;agent_companyNULL_204&quot;        
+## [201] &quot;agent_companyNULL_218&quot;         &quot;agent_companyNULL_253&quot;        
+## [203] &quot;agent_companyNULL_270&quot;         &quot;agent_companyNULL_277&quot;        
+## [205] &quot;agent_companyNULL_281&quot;         &quot;agent_companyNULL_309&quot;        
+## [207] &quot;agent_companyNULL_316&quot;         &quot;agent_companyNULL_321&quot;        
+## [209] &quot;agent_companyNULL_350&quot;         &quot;agent_companyNULL_38&quot;         
+## [211] &quot;agent_companyNULL_392&quot;         &quot;agent_companyNULL_416&quot;        
+## [213] &quot;agent_companyNULL_461&quot;         &quot;agent_companyNULL_470&quot;        
+## [215] &quot;agent_companyNULL_478&quot;         &quot;agent_companyNULL_68&quot;         
+## [217] &quot;agent_companyNULL_77&quot;          &quot;singles_adults&quot;               
+## [219] &quot;dif_room&quot;                      &quot;weekmonthFebruary_9&quot;          
+## [221] &quot;weekmonthJune_27&quot;              &quot;weekmonthMay_19&quot;              
+## [223] &quot;weekmonthNovember_49&quot;          &quot;weekmonthSeptember_40&quot;        
+## [225] &quot;daymontApril_4&quot;                &quot;daymontApril_5&quot;               
+## [227] &quot;daymontApril_6&quot;                &quot;daymontAugust_18&quot;             
+## [229] &quot;daymontDecember_16&quot;            &quot;daymontDecember_18&quot;           
+## [231] &quot;daymontDecember_3&quot;             &quot;daymontDecember_5&quot;            
+## [233] &quot;daymontDecember_6&quot;             &quot;daymontFebruary_8&quot;            
+## [235] &quot;daymontJuly_1&quot;                 &quot;daymontJuly_10&quot;               
+## [237] &quot;daymontJuly_15&quot;                &quot;daymontJuly_16&quot;               
+## [239] &quot;daymontJuly_17&quot;                &quot;daymontJuly_2&quot;                
+## [241] &quot;daymontJuly_23&quot;                &quot;daymontJuly_27&quot;               
+## [243] &quot;daymontJuly_29&quot;                &quot;daymontJuly_5&quot;                
+## [245] &quot;daymontJuly_7&quot;                 &quot;daymontJune_10&quot;               
+## [247] &quot;daymontJune_21&quot;                &quot;daymontJune_26&quot;               
+## [249] &quot;daymontJune_8&quot;                 &quot;daymontMarch_29&quot;              
+## [251] &quot;daymontMay_15&quot;                 &quot;daymontMay_25&quot;                
+## [253] &quot;daymontMay_26&quot;                 &quot;daymontMay_27&quot;                
+## [255] &quot;daymontNovember_12&quot;            &quot;daymontNovember_23&quot;           
+## [257] &quot;daymontNovember_28&quot;            &quot;daymontOctober_12&quot;            
+## [259] &quot;daymontOctober_13&quot;             &quot;daymontOctober_14&quot;            
+## [261] &quot;daymontOctober_22&quot;             &quot;daymontOctober_25&quot;            
+## [263] &quot;daymontOctober_26&quot;             &quot;daymontOctober_27&quot;            
+## [265] &quot;daymontOctober_8&quot;              &quot;weekdaymonthApril_15_4&quot;       
+## [267] &quot;weekdaymonthApril_15_5&quot;        &quot;weekdaymonthApril_15_6&quot;       
+## [269] &quot;weekdaymonthAugust_33_14&quot;      &quot;weekdaymonthAugust_34_18&quot;     
+## [271] &quot;weekdaymonthAugust_35_29&quot;      &quot;weekdaymonthDecember_49_3&quot;    
+## [273] &quot;weekdaymonthDecember_49_5&quot;     &quot;weekdaymonthDecember_50_6&quot;    
+## [275] &quot;weekdaymonthDecember_51_16&quot;    &quot;weekdaymonthDecember_53_26&quot;   
+## [277] &quot;weekdaymonthFebruary_10_28&quot;    &quot;weekdaymonthFebruary_8_24&quot;    
+## [279] &quot;weekdaymonthJanuary_1_6&quot;       &quot;weekdaymonthJanuary_2_6&quot;      
+## [281] &quot;weekdaymonthJuly_27_1&quot;         &quot;weekdaymonthJuly_27_2&quot;        
+## [283] &quot;weekdaymonthJuly_27_3&quot;         &quot;weekdaymonthJuly_28_11&quot;       
+## [285] &quot;weekdaymonthJuly_28_5&quot;         &quot;weekdaymonthJuly_28_7&quot;        
+## [287] &quot;weekdaymonthJuly_29_15&quot;        &quot;weekdaymonthJuly_29_16&quot;       
+## [289] &quot;weekdaymonthJuly_30_23&quot;        &quot;weekdaymonthJuly_31_27&quot;       
+## [291] &quot;weekdaymonthJuly_31_29&quot;        &quot;weekdaymonthJune_24_10&quot;       
+## [293] &quot;weekdaymonthJune_24_8&quot;         &quot;weekdaymonthJune_26_21&quot;       
+## [295] &quot;weekdaymonthJune_27_26&quot;        &quot;weekdaymonthMarch_11_10&quot;      
+## [297] &quot;weekdaymonthMarch_11_14&quot;       &quot;weekdaymonthMarch_9_1&quot;        
+## [299] &quot;weekdaymonthMay_21_15&quot;         &quot;weekdaymonthMay_22_25&quot;        
+## [301] &quot;weekdaymonthMay_22_26&quot;         &quot;weekdaymonthMay_22_27&quot;        
+## [303] &quot;weekdaymonthNovember_46_12&quot;    &quot;weekdaymonthNovember_48_20&quot;   
+## [305] &quot;weekdaymonthNovember_48_23&quot;    &quot;weekdaymonthNovember_48_27&quot;   
+## [307] &quot;weekdaymonthNovember_49_27&quot;    &quot;weekdaymonthNovember_49_28&quot;   
+## [309] &quot;weekdaymonthOctober_40_2&quot;      &quot;weekdaymonthOctober_41_8&quot;     
+## [311] &quot;weekdaymonthOctober_41_9&quot;      &quot;weekdaymonthOctober_42_12&quot;    
+## [313] &quot;weekdaymonthOctober_42_13&quot;     &quot;weekdaymonthOctober_42_14&quot;    
+## [315] &quot;weekdaymonthOctober_42_17&quot;     &quot;weekdaymonthOctober_42_9&quot;     
+## [317] &quot;weekdaymonthOctober_43_17&quot;     &quot;weekdaymonthOctober_43_22&quot;    
+## [319] &quot;weekdaymonthOctober_43_23&quot;     &quot;weekdaymonthOctober_44_25&quot;    
+## [321] &quot;weekdaymonthOctober_44_26&quot;     &quot;weekdaymonthOctober_44_27&quot;    
+## [323] &quot;weekdaymonthSeptember_36_5&quot;    &quot;weekdaymonthSeptember_37_4&quot;   
+## [325] &quot;month_diasemApril_lunes&quot;       &quot;month_diasemDecember_lunes&quot;   
+## [327] &quot;month_diasemDecember_viernes&quot;  &quot;month_diasemFebruary_sabado&quot;  
+## [329] &quot;month_diasemJuly_miercoles&quot;    &quot;month_diasemMarch_domingo&quot;    
+## [331] &quot;month_diasemMay_jueves&quot;        &quot;month_diasemOctober_sabado&quot;   
+## [333] &quot;week_diasem1_sabado&quot;           &quot;week_diasem12_lunes&quot;          
+## [335] &quot;week_diasem15_lunes&quot;           &quot;week_diasem15_martes&quot;         
+## [337] &quot;week_diasem15_miercoles&quot;       &quot;week_diasem21_domingo&quot;        
+## [339] &quot;week_diasem22_jueves&quot;          &quot;week_diasem22_miercoles&quot;      
+## [341] &quot;week_diasem22_viernes&quot;         &quot;week_diasem24_miercoles&quot;      
+## [343] &quot;week_diasem24_viernes&quot;         &quot;week_diasem26_martes&quot;         
+## [345] &quot;week_diasem27_domingo&quot;         &quot;week_diasem27_miercoles&quot;      
+## [347] &quot;week_diasem28_sabado&quot;          &quot;week_diasem29_sabado&quot;         
+## [349] &quot;week_diasem29_viernes&quot;         &quot;week_diasem31_lunes&quot;          
+## [351] &quot;week_diasem31_viernes&quot;         &quot;week_diasem33_sabado&quot;         
+## [353] &quot;week_diasem36_jueves&quot;          &quot;week_diasem37_jueves&quot;         
+## [355] &quot;week_diasem38_martes&quot;          &quot;week_diasem39_sabado&quot;         
+## [357] &quot;week_diasem40_sabado&quot;          &quot;week_diasem41_martes&quot;         
+## [359] &quot;week_diasem44_domingo&quot;         &quot;week_diasem45_sabado&quot;         
+## [361] &quot;week_diasem47_miercoles&quot;       &quot;week_diasem48_viernes&quot;        
+## [363] &quot;week_diasem49_viernes&quot;         &quot;week_diasem5_sabado&quot;          
+## [365] &quot;week_diasem5_viernes&quot;          &quot;week_diasem51_viernes&quot;        
+## [367] &quot;tasa_canc&quot;                     &quot;market_dist3_TA_TO&quot;           
+## [369] &quot;market_dist8_5&quot;                &quot;market_distOfflineTA_TO_TA_TO&quot;
+## [371] &quot;cust_depostiTransient_B&quot;       &quot;cust_segmentContract_7&quot;       
+## [373] &quot;cust_segmentTransient_7&quot;       &quot;cust_segmentTransient-Party_7&quot;
+## [375] &quot;lead_depositA_[ 16, 59)&quot;       &quot;lead_depositA_[ 59,146)&quot;      
+## [377] &quot;lead_depositA_[146,737]&quot;       &quot;lead_depositB_[ 59,146)&quot;      
+## [379] &quot;lead_week1_[ 59,146)&quot;          &quot;lead_week1_[146,737]&quot;         
+## [381] &quot;lead_week10_[146,737]&quot;         &quot;lead_week12_[ 59,146)&quot;        
+## [383] &quot;lead_week15_[ 16, 59)&quot;         &quot;lead_week17_[146,737]&quot;        
+## [385] &quot;lead_week18_[ 59,146)&quot;         &quot;lead_week2_[  0, 16)&quot;         
+## [387] &quot;lead_week2_[ 16, 59)&quot;          &quot;lead_week2_[ 59,146)&quot;         
+## [389] &quot;lead_week2_[146,737]&quot;          &quot;lead_week21_[  0, 16)&quot;        
+## [391] &quot;lead_week22_[ 59,146)&quot;         &quot;lead_week22_[146,737]&quot;        
+## [393] &quot;lead_week24_[ 16, 59)&quot;         &quot;lead_week24_[ 59,146)&quot;        
+## [395] &quot;lead_week29_[146,737]&quot;         &quot;lead_week3_[  0, 16)&quot;         
+## [397] &quot;lead_week3_[ 59,146)&quot;          &quot;lead_week3_[146,737]&quot;         
+## [399] &quot;lead_week31_[ 16, 59)&quot;         &quot;lead_week32_[  0, 16)&quot;        
+## [401] &quot;lead_week32_[ 16, 59)&quot;         &quot;lead_week32_[ 59,146)&quot;        
+## [403] &quot;lead_week34_[146,737]&quot;         &quot;lead_week35_[ 16, 59)&quot;        
+## [405] &quot;lead_week37_[ 59,146)&quot;         &quot;lead_week39_[ 59,146)&quot;        
+## [407] &quot;lead_week4_[146,737]&quot;          &quot;lead_week40_[ 59,146)&quot;        
+## [409] &quot;lead_week42_[  0, 16)&quot;         &quot;lead_week42_[ 16, 59)&quot;        
+## [411] &quot;lead_week42_[ 59,146)&quot;         &quot;lead_week43_[ 59,146)&quot;        
+## [413] &quot;lead_week44_[  0, 16)&quot;         &quot;lead_week44_[ 59,146)&quot;        
+## [415] &quot;lead_week44_[146,737]&quot;         &quot;lead_week45_[ 16, 59)&quot;        
+## [417] &quot;lead_week45_[ 59,146)&quot;         &quot;lead_week48_[  0, 16)&quot;        
+## [419] &quot;lead_week48_[ 59,146)&quot;         &quot;lead_week49_[ 59,146)&quot;        
+## [421] &quot;lead_week49_[146,737]&quot;         &quot;lead_week5_[  0, 16)&quot;         
+## [423] &quot;lead_week5_[ 59,146)&quot;          &quot;lead_week50_[  0, 16)&quot;        
+## [425] &quot;lead_week50_[ 16, 59)&quot;         &quot;lead_week50_[ 59,146)&quot;        
+## [427] &quot;lead_week51_[146,737]&quot;         &quot;lead_week52_[ 59,146)&quot;        
+## [429] &quot;lead_week52_[146,737]&quot;         &quot;lead_week53_[146,737]&quot;        
+## [431] &quot;lead_week6_[  0, 16)&quot;          &quot;lead_week6_[ 59,146)&quot;         
+## [433] &quot;lead_week6_[146,737]&quot;          &quot;lead_week8_[  0, 16)&quot;         
+## [435] &quot;lead_week8_[146,737]&quot;          &quot;lead_week9_[  0, 16)&quot;         
+## [437] &quot;meal_reservFB_A&quot;               &quot;meal_reservHB_G&quot;              
+## [439] &quot;meal_reservSC_A&quot;               &quot;meal_reservSC_D&quot;              
+## [441] &quot;meal_reservSC_F&quot;               &quot;meal_reservSC_G&quot;              
+## [443] &quot;meal_reservSC_P&quot;               &quot;meal_reservUndefined_D&quot;       
+## [445] &quot;country_monthAGO_December&quot;     &quot;country_monthAGO_February&quot;    
+## [447] &quot;country_monthAND_January&quot;      &quot;country_monthARE_January&quot;     
+## [449] &quot;country_monthAUS_April&quot;        &quot;country_monthAUS_February&quot;    
+## [451] &quot;country_monthAUS_January&quot;      &quot;country_monthAUT_July&quot;        
+## [453] &quot;country_monthAUT_March&quot;        &quot;country_monthAUT_October&quot;     
+## [455] &quot;country_monthBEL_August&quot;       &quot;country_monthBEL_July&quot;        
+## [457] &quot;country_monthBEL_October&quot;      &quot;country_monthBGR_May&quot;         
+## [459] &quot;country_monthBLR_January&quot;      &quot;country_monthBRA_April&quot;       
+## [461] &quot;country_monthCHE_July&quot;         &quot;country_monthCHE_March&quot;       
+## [463] &quot;country_monthCHL_April&quot;        &quot;country_monthCHL_December&quot;    
+## [465] &quot;country_monthCHN_July&quot;         &quot;country_monthCHN_October&quot;     
+## [467] &quot;country_monthCOL_November&quot;     &quot;country_monthCOL_September&quot;   
+## [469] &quot;country_monthCYP_August&quot;       &quot;country_monthCYP_May&quot;         
+## [471] &quot;country_monthCZE_August&quot;       &quot;country_monthCZE_July&quot;        
+## [473] &quot;country_monthCZE_October&quot;      &quot;country_monthDEU_April&quot;       
+## [475] &quot;country_monthDEU_December&quot;     &quot;country_monthDEU_October&quot;     
+## [477] &quot;country_monthEGY_February&quot;     &quot;country_monthEGY_March&quot;       
+## [479] &quot;country_monthEGY_November&quot;     &quot;country_monthESP_April&quot;       
+## [481] &quot;country_monthESP_December&quot;     &quot;country_monthESP_July&quot;        
+## [483] &quot;country_monthESP_June&quot;         &quot;country_monthFRA_April&quot;       
+## [485] &quot;country_monthFRA_January&quot;      &quot;country_monthFRA_June&quot;        
+## [487] &quot;country_monthFRA_March&quot;        &quot;country_monthFRA_May&quot;         
+## [489] &quot;country_monthFRA_November&quot;     &quot;country_monthFRA_September&quot;   
+## [491] &quot;country_monthGAB_September&quot;    &quot;country_monthGBR_June&quot;        
+## [493] &quot;country_monthGBR_May&quot;          &quot;country_monthGBR_November&quot;    
+## [495] &quot;country_monthGBR_October&quot;      &quot;country_monthGEO_March&quot;       
+## [497] &quot;country_monthGIB_August&quot;       &quot;country_monthGIB_March&quot;       
+## [499] &quot;country_monthHND_February&quot;     &quot;country_monthHRV_March&quot;       
+## [501] &quot;country_monthHUN_August&quot;       &quot;country_monthHUN_November&quot;    
+## [503] &quot;country_monthIRL_July&quot;         &quot;country_monthIRL_June&quot;        
+## [505] &quot;country_monthIRL_May&quot;          &quot;country_monthIRL_October&quot;     
+## [507] &quot;country_monthIRN_February&quot;     &quot;country_monthIRN_March&quot;       
+## [509] &quot;country_monthIRN_October&quot;      &quot;country_monthISR_July&quot;        
+## [511] &quot;country_monthITA_April&quot;        &quot;country_monthITA_July&quot;        
+## [513] &quot;country_monthJPN_December&quot;     &quot;country_monthKAZ_January&quot;     
+## [515] &quot;country_monthKAZ_July&quot;         &quot;country_monthKEN_March&quot;       
+## [517] &quot;country_monthKOR_June&quot;         &quot;country_monthKWT_December&quot;    
+## [519] &quot;country_monthLBN_August&quot;       &quot;country_monthLUX_December&quot;    
+## [521] &quot;country_monthLUX_February&quot;     &quot;country_monthLUX_November&quot;    
+## [523] &quot;country_monthLUX_October&quot;      &quot;country_monthMAR_August&quot;      
+## [525] &quot;country_monthMAR_December&quot;     &quot;country_monthMAR_February&quot;    
+## [527] &quot;country_monthMDV_November&quot;     &quot;country_monthMLT_August&quot;      
+## [529] &quot;country_monthMOZ_June&quot;         &quot;country_monthMYS_December&quot;    
+## [531] &quot;country_monthNGA_March&quot;        &quot;country_monthNLD_February&quot;    
+## [533] &quot;country_monthNOR_July&quot;         &quot;country_monthOMN_January&quot;     
+## [535] &quot;country_monthPER_March&quot;        &quot;country_monthPER_November&quot;    
+## [537] &quot;country_monthPRT_August&quot;       &quot;country_monthPRT_January&quot;     
+## [539] &quot;country_monthPRT_May&quot;          &quot;country_monthPRT_November&quot;    
+## [541] &quot;country_monthPRT_October&quot;      &quot;country_monthPRT_September&quot;   
+## [543] &quot;country_monthQAT_April&quot;        &quot;country_monthQAT_June&quot;        
+## [545] &quot;country_monthROU_February&quot;     &quot;country_monthRUS_March&quot;       
+## [547] &quot;country_monthSAU_February&quot;     &quot;country_monthSGP_January&quot;     
+## [549] &quot;country_monthSVK_August&quot;       &quot;country_monthSVN_March&quot;       
+## [551] &quot;country_monthSWE_December&quot;     &quot;country_monthSWE_February&quot;    
+## [553] &quot;country_monthSWE_March&quot;        &quot;country_monthSWE_September&quot;   
+## [555] &quot;country_monthTHA_February&quot;     &quot;country_monthTHA_October&quot;     
+## [557] &quot;country_monthTJK_May&quot;          &quot;country_monthTMP_December&quot;    
+## [559] &quot;country_monthTUN_March&quot;        &quot;country_monthTUR_February&quot;    
+## [561] &quot;country_monthTUR_January&quot;      &quot;country_monthTUR_July&quot;        
+## [563] &quot;country_monthTZA_September&quot;    &quot;country_monthVEN_January&quot;     
+## [565] &quot;country_monthVEN_September&quot;    &quot;country_monthZAF_October&quot;     
+## [567] &quot;country_monthZMB_April&quot;</code></pre>
+</div>
+<div id="log-loss-test-oos" class="section level3" number="4.1.4">
+<h3><span class="header-section-number">4.1.4</span> LOG LOSS test OOS</h3>
+<p>Ahora pruebo el error log loss del lasso</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="modeling.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Predicciones</span></span>
+<span id="cb18-2"><a href="modeling.html#cb18-2" aria-hidden="true" tabindex="-1"></a>lasso_score <span class="ot">&lt;-</span> <span class="fu">predict</span>(cvlasso_a,</span>
+<span id="cb18-3"><a href="modeling.html#cb18-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">newdata =</span> Xb,</span>
+<span id="cb18-4"><a href="modeling.html#cb18-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">type=</span><span class="st">&quot;response&quot;</span>,</span>
+<span id="cb18-5"><a href="modeling.html#cb18-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">select =</span> <span class="st">&quot;min&quot;</span> )</span>
+<span id="cb18-6"><a href="modeling.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="modeling.html#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="modeling.html#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe</span></span>
+<span id="cb18-9"><a href="modeling.html#cb18-9" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, lasso_score)</span>
+<span id="cb18-10"><a href="modeling.html#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(lasso_validation)[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;lasso_score&#39;</span>)</span>
+<span id="cb18-11"><a href="modeling.html#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="modeling.html#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MLmetrics)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;MLmetrics&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     Recall</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="modeling.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(lasso_validation<span class="sc">$</span>lasso_score,lasso_validation<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] 0.3079782</code></pre>
+<p>Nos dio un error sorprendetemente muy pequeño. Con este modelo logramos realizar un error de 0.41872 y 0.42131 en los datos de test de Kaggle.</p>
+</div>
+</div>
+<div id="xgboosting" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> XGBOOSTING</h2>
+<p>Sin embargo, para ganar el concurso optamos por explorar otros modelos que generalmente tienen mayor potencial de ganar este tipo de concursos: XG boosting.</p>
+<p>En este caso, se eligieron los hiperparametros mediante un tuning manual explorando el comportamiento del error cuando se fijaban todos los hp excepto uno. De esta manera se fijo la profunidad máxima del arbol en 6 y el learning rate en .06.</p>
+<p>Debido a la alta cantidad de variables de las bases de datos (y pues que muchas son poco informativas) el colsample por cada arbol generado es alto: del 70%. De haber tenido solo variables muy informativas pues bajariamos ese porcentaje, sin embargo quicimos explitar la capacidad del modelo de seleccionar por si solo las variables.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="modeling.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de entrenamiento</span></span>
+<span id="cb23-2"><a href="modeling.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;xgboost&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:plotly&#39;:
+## 
+##     slice</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     slice</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="modeling.html#cb27-1" aria-hidden="true" tabindex="-1"></a>dtrain <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xa, <span class="at">label =</span> Ya) </span>
+<span id="cb27-2"><a href="modeling.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Label es el target</span></span>
+<span id="cb27-3"><a href="modeling.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de validación</span></span>
+<span id="cb27-4"><a href="modeling.html#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="modeling.html#cb27-5" aria-hidden="true" tabindex="-1"></a>dtest <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xb, <span class="at">label =</span> y)</span>
+<span id="cb27-6"><a href="modeling.html#cb27-6" aria-hidden="true" tabindex="-1"></a>watchlist <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">train =</span> dtrain, <span class="at">eval =</span> dtest) </span>
+<span id="cb27-7"><a href="modeling.html#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Para evaluar el performance del modelo</span></span>
+<span id="cb27-8"><a href="modeling.html#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="modeling.html#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="modeling.html#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenamiento del modelo</span></span>
+<span id="cb27-11"><a href="modeling.html#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="modeling.html#cb27-12" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">max_depth =</span> <span class="dv">6</span>, <span class="at">learning_rate =</span> <span class="fl">0.06</span>, </span>
+<span id="cb27-13"><a href="modeling.html#cb27-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">objective =</span> <span class="st">&quot;binary:logistic&quot;</span>,</span>
+<span id="cb27-14"><a href="modeling.html#cb27-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">eval_metric =</span> <span class="st">&quot;logloss&quot;</span>, <span class="at">subsample =</span> <span class="fl">0.6</span>, <span class="at">colsample_bytree =</span> <span class="fl">0.7</span>)</span>
+<span id="cb27-15"><a href="modeling.html#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="modeling.html#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="modeling.html#cb27-17" aria-hidden="true" tabindex="-1"></a>xgb_model <span class="ot">&lt;-</span> <span class="fu">xgb.train</span>(<span class="at">params =</span> param, dtrain, </span>
+<span id="cb27-18"><a href="modeling.html#cb27-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">early_stopping_rounds =</span>  <span class="dv">10</span>, </span>
+<span id="cb27-19"><a href="modeling.html#cb27-19" aria-hidden="true" tabindex="-1"></a>                       <span class="at">nrounds =</span> <span class="dv">300</span>,</span>
+<span id="cb27-20"><a href="modeling.html#cb27-20" aria-hidden="true" tabindex="-1"></a>                 watchlist)</span></code></pre></div>
+<pre><code>## [1]  train-logloss:0.661126  eval-logloss:0.661290 
+## Multiple eval metrics are present. Will use eval_logloss for early stopping.
+## Will train until eval_logloss hasn&#39;t improved in 10 rounds.
+## 
+## [2]  train-logloss:0.633231  eval-logloss:0.633172 
+## [3]  train-logloss:0.607968  eval-logloss:0.607971 
+## [4]  train-logloss:0.585377  eval-logloss:0.585257 
+## [5]  train-logloss:0.564903  eval-logloss:0.564549 
+## [6]  train-logloss:0.548370  eval-logloss:0.547907 
+## [7]  train-logloss:0.532065  eval-logloss:0.531632 
+## [8]  train-logloss:0.516597  eval-logloss:0.516088 
+## [9]  train-logloss:0.503581  eval-logloss:0.503086 
+## [10] train-logloss:0.491568  eval-logloss:0.490988 
+## [11] train-logloss:0.477888  eval-logloss:0.477429 
+## [12] train-logloss:0.467147  eval-logloss:0.466648 
+## [13] train-logloss:0.458369  eval-logloss:0.457845 
+## [14] train-logloss:0.447752  eval-logloss:0.447146 
+## [15] train-logloss:0.437190  eval-logloss:0.436739 
+## [16] train-logloss:0.427902  eval-logloss:0.427458 
+## [17] train-logloss:0.421164  eval-logloss:0.420661 
+## [18] train-logloss:0.414854  eval-logloss:0.414284 
+## [19] train-logloss:0.406952  eval-logloss:0.406353 
+## [20] train-logloss:0.399499  eval-logloss:0.398982 
+## [21] train-logloss:0.393575  eval-logloss:0.393009 
+## [22] train-logloss:0.388775  eval-logloss:0.388227 
+## [23] train-logloss:0.382531  eval-logloss:0.381928 
+## [24] train-logloss:0.377167  eval-logloss:0.376684 
+## [25] train-logloss:0.372310  eval-logloss:0.371952 
+## [26] train-logloss:0.368713  eval-logloss:0.368232 
+## [27] train-logloss:0.364642  eval-logloss:0.364151 
+## [28] train-logloss:0.361578  eval-logloss:0.361061 
+## [29] train-logloss:0.357005  eval-logloss:0.356515 
+## [30] train-logloss:0.354167  eval-logloss:0.353682 
+## [31] train-logloss:0.351240  eval-logloss:0.350763 
+## [32] train-logloss:0.347753  eval-logloss:0.347392 
+## [33] train-logloss:0.342930  eval-logloss:0.342696 
+## [34] train-logloss:0.339237  eval-logloss:0.338993 
+## [35] train-logloss:0.336474  eval-logloss:0.336195 
+## [36] train-logloss:0.334657  eval-logloss:0.334449 
+## [37] train-logloss:0.332689  eval-logloss:0.332532 
+## [38] train-logloss:0.329575  eval-logloss:0.329601 
+## [39] train-logloss:0.327522  eval-logloss:0.327603 
+## [40] train-logloss:0.325327  eval-logloss:0.325409 
+## [41] train-logloss:0.323664  eval-logloss:0.323906 
+## [42] train-logloss:0.320963  eval-logloss:0.321163 
+## [43] train-logloss:0.318701  eval-logloss:0.319025 
+## [44] train-logloss:0.317154  eval-logloss:0.317435 
+## [45] train-logloss:0.315915  eval-logloss:0.316161 
+## [46] train-logloss:0.313681  eval-logloss:0.313951 
+## [47] train-logloss:0.311841  eval-logloss:0.312160 
+## [48] train-logloss:0.310537  eval-logloss:0.310874 
+## [49] train-logloss:0.308272  eval-logloss:0.308666 
+## [50] train-logloss:0.306960  eval-logloss:0.307392 
+## [51] train-logloss:0.305617  eval-logloss:0.306124 
+## [52] train-logloss:0.304651  eval-logloss:0.305219 
+## [53] train-logloss:0.303150  eval-logloss:0.303775 
+## [54] train-logloss:0.302002  eval-logloss:0.302679 
+## [55] train-logloss:0.300560  eval-logloss:0.301315 
+## [56] train-logloss:0.299771  eval-logloss:0.300580 
+## [57] train-logloss:0.298658  eval-logloss:0.299494 
+## [58] train-logloss:0.297638  eval-logloss:0.298431 
+## [59] train-logloss:0.296941  eval-logloss:0.297746 
+## [60] train-logloss:0.295331  eval-logloss:0.296192 
+## [61] train-logloss:0.294501  eval-logloss:0.295385 
+## [62] train-logloss:0.293787  eval-logloss:0.294727 
+## [63] train-logloss:0.292908  eval-logloss:0.293870 
+## [64] train-logloss:0.291310  eval-logloss:0.292313 
+## [65] train-logloss:0.290722  eval-logloss:0.291701 
+## [66] train-logloss:0.290166  eval-logloss:0.291167 
+## [67] train-logloss:0.289431  eval-logloss:0.290470 
+## [68] train-logloss:0.288713  eval-logloss:0.289840 
+## [69] train-logloss:0.287995  eval-logloss:0.289198 
+## [70] train-logloss:0.287229  eval-logloss:0.288457 
+## [71] train-logloss:0.286697  eval-logloss:0.287925 
+## [72] train-logloss:0.286294  eval-logloss:0.287567 
+## [73] train-logloss:0.285455  eval-logloss:0.286788 
+## [74] train-logloss:0.284674  eval-logloss:0.286143 
+## [75] train-logloss:0.284171  eval-logloss:0.285645 
+## [76] train-logloss:0.283340  eval-logloss:0.284832 
+## [77] train-logloss:0.282914  eval-logloss:0.284492 
+## [78] train-logloss:0.281889  eval-logloss:0.283639 
+## [79] train-logloss:0.281391  eval-logloss:0.283165 
+## [80] train-logloss:0.280639  eval-logloss:0.282432 
+## [81] train-logloss:0.279928  eval-logloss:0.281787 
+## [82] train-logloss:0.279075  eval-logloss:0.281033 
+## [83] train-logloss:0.278711  eval-logloss:0.280728 
+## [84] train-logloss:0.278267  eval-logloss:0.280322 
+## [85] train-logloss:0.277945  eval-logloss:0.280035 
+## [86] train-logloss:0.277669  eval-logloss:0.279760 
+## [87] train-logloss:0.277379  eval-logloss:0.279460 
+## [88] train-logloss:0.276993  eval-logloss:0.279092 
+## [89] train-logloss:0.276437  eval-logloss:0.278533 
+## [90] train-logloss:0.276153  eval-logloss:0.278289 
+## [91] train-logloss:0.275509  eval-logloss:0.277802 
+## [92] train-logloss:0.275200  eval-logloss:0.277603 
+## [93] train-logloss:0.274869  eval-logloss:0.277277 
+## [94] train-logloss:0.274432  eval-logloss:0.276912 
+## [95] train-logloss:0.274129  eval-logloss:0.276637 
+## [96] train-logloss:0.273893  eval-logloss:0.276451 
+## [97] train-logloss:0.272634  eval-logloss:0.275314 
+## [98] train-logloss:0.272315  eval-logloss:0.275097 
+## [99] train-logloss:0.272031  eval-logloss:0.274841 
+## [100]    train-logloss:0.271797  eval-logloss:0.274690 
+## [101]    train-logloss:0.271332  eval-logloss:0.274259 
+## [102]    train-logloss:0.270691  eval-logloss:0.273673 
+## [103]    train-logloss:0.270449  eval-logloss:0.273463 
+## [104]    train-logloss:0.269993  eval-logloss:0.273082 
+## [105]    train-logloss:0.269671  eval-logloss:0.272842 
+## [106]    train-logloss:0.269237  eval-logloss:0.272431 
+## [107]    train-logloss:0.268992  eval-logloss:0.272254 
+## [108]    train-logloss:0.268296  eval-logloss:0.271656 
+## [109]    train-logloss:0.268071  eval-logloss:0.271497 
+## [110]    train-logloss:0.267862  eval-logloss:0.271313 
+## [111]    train-logloss:0.267088  eval-logloss:0.270609 
+## [112]    train-logloss:0.266810  eval-logloss:0.270390 
+## [113]    train-logloss:0.266474  eval-logloss:0.270057 
+## [114]    train-logloss:0.266262  eval-logloss:0.269872 
+## [115]    train-logloss:0.265934  eval-logloss:0.269627 
+## [116]    train-logloss:0.265774  eval-logloss:0.269453 
+## [117]    train-logloss:0.265309  eval-logloss:0.269009 
+## [118]    train-logloss:0.265035  eval-logloss:0.268822 
+## [119]    train-logloss:0.264851  eval-logloss:0.268664 
+## [120]    train-logloss:0.264699  eval-logloss:0.268495 
+## [121]    train-logloss:0.264373  eval-logloss:0.268215 
+## [122]    train-logloss:0.264044  eval-logloss:0.268005 
+## [123]    train-logloss:0.263657  eval-logloss:0.267742 
+## [124]    train-logloss:0.263285  eval-logloss:0.267382 
+## [125]    train-logloss:0.263114  eval-logloss:0.267241 
+## [126]    train-logloss:0.262274  eval-logloss:0.266481 
+## [127]    train-logloss:0.262067  eval-logloss:0.266312 
+## [128]    train-logloss:0.261825  eval-logloss:0.266147 
+## [129]    train-logloss:0.261614  eval-logloss:0.265973 
+## [130]    train-logloss:0.261392  eval-logloss:0.265785 
+## [131]    train-logloss:0.261187  eval-logloss:0.265648 
+## [132]    train-logloss:0.260863  eval-logloss:0.265376 
+## [133]    train-logloss:0.260672  eval-logloss:0.265188 
+## [134]    train-logloss:0.260456  eval-logloss:0.265000 
+## [135]    train-logloss:0.260053  eval-logloss:0.264656 
+## [136]    train-logloss:0.259880  eval-logloss:0.264508 
+## [137]    train-logloss:0.259681  eval-logloss:0.264393 
+## [138]    train-logloss:0.259283  eval-logloss:0.264113 
+## [139]    train-logloss:0.259048  eval-logloss:0.263963 
+## [140]    train-logloss:0.258827  eval-logloss:0.263773 
+## [141]    train-logloss:0.258724  eval-logloss:0.263696 
+## [142]    train-logloss:0.258566  eval-logloss:0.263539 
+## [143]    train-logloss:0.258411  eval-logloss:0.263435 
+## [144]    train-logloss:0.258166  eval-logloss:0.263267 
+## [145]    train-logloss:0.257955  eval-logloss:0.263093 
+## [146]    train-logloss:0.257599  eval-logloss:0.262819 
+## [147]    train-logloss:0.257461  eval-logloss:0.262703 
+## [148]    train-logloss:0.257054  eval-logloss:0.262379 
+## [149]    train-logloss:0.256810  eval-logloss:0.262130 
+## [150]    train-logloss:0.256599  eval-logloss:0.262007 
+## [151]    train-logloss:0.256465  eval-logloss:0.261927 
+## [152]    train-logloss:0.256349  eval-logloss:0.261836 
+## [153]    train-logloss:0.256053  eval-logloss:0.261648 
+## [154]    train-logloss:0.255675  eval-logloss:0.261313 
+## [155]    train-logloss:0.255579  eval-logloss:0.261235 
+## [156]    train-logloss:0.255348  eval-logloss:0.261074 
+## [157]    train-logloss:0.255136  eval-logloss:0.260921 
+## [158]    train-logloss:0.254460  eval-logloss:0.260376 
+## [159]    train-logloss:0.254303  eval-logloss:0.260261 
+## [160]    train-logloss:0.254109  eval-logloss:0.260095 
+## [161]    train-logloss:0.253921  eval-logloss:0.260007 
+## [162]    train-logloss:0.253716  eval-logloss:0.259925 
+## [163]    train-logloss:0.253631  eval-logloss:0.259835 
+## [164]    train-logloss:0.253509  eval-logloss:0.259752 
+## [165]    train-logloss:0.253373  eval-logloss:0.259682 
+## [166]    train-logloss:0.253272  eval-logloss:0.259615 
+## [167]    train-logloss:0.253169  eval-logloss:0.259545 
+## [168]    train-logloss:0.253007  eval-logloss:0.259435 
+## [169]    train-logloss:0.252907  eval-logloss:0.259380 
+## [170]    train-logloss:0.252799  eval-logloss:0.259302 
+## [171]    train-logloss:0.252720  eval-logloss:0.259232 
+## [172]    train-logloss:0.252447  eval-logloss:0.259042 
+## [173]    train-logloss:0.252187  eval-logloss:0.258918 
+## [174]    train-logloss:0.251946  eval-logloss:0.258730 
+## [175]    train-logloss:0.251849  eval-logloss:0.258668 
+## [176]    train-logloss:0.251748  eval-logloss:0.258613 
+## [177]    train-logloss:0.251652  eval-logloss:0.258561 
+## [178]    train-logloss:0.251499  eval-logloss:0.258481 
+## [179]    train-logloss:0.251304  eval-logloss:0.258313 
+## [180]    train-logloss:0.250837  eval-logloss:0.257922 
+## [181]    train-logloss:0.250667  eval-logloss:0.257822 
+## [182]    train-logloss:0.250445  eval-logloss:0.257721 
+## [183]    train-logloss:0.250308  eval-logloss:0.257614 
+## [184]    train-logloss:0.250228  eval-logloss:0.257526 
+## [185]    train-logloss:0.249798  eval-logloss:0.257198 
+## [186]    train-logloss:0.249378  eval-logloss:0.256864 
+## [187]    train-logloss:0.249219  eval-logloss:0.256763 
+## [188]    train-logloss:0.249156  eval-logloss:0.256723 
+## [189]    train-logloss:0.249038  eval-logloss:0.256637 
+## [190]    train-logloss:0.248938  eval-logloss:0.256592 
+## [191]    train-logloss:0.248811  eval-logloss:0.256535 
+## [192]    train-logloss:0.248679  eval-logloss:0.256490 
+## [193]    train-logloss:0.248513  eval-logloss:0.256431 
+## [194]    train-logloss:0.248407  eval-logloss:0.256368 
+## [195]    train-logloss:0.248249  eval-logloss:0.256277 
+## [196]    train-logloss:0.248160  eval-logloss:0.256196 
+## [197]    train-logloss:0.247971  eval-logloss:0.256032 
+## [198]    train-logloss:0.247822  eval-logloss:0.255901 
+## [199]    train-logloss:0.247705  eval-logloss:0.255838 
+## [200]    train-logloss:0.247609  eval-logloss:0.255762 
+## [201]    train-logloss:0.247535  eval-logloss:0.255739 
+## [202]    train-logloss:0.247441  eval-logloss:0.255685 
+## [203]    train-logloss:0.247240  eval-logloss:0.255524 
+## [204]    train-logloss:0.247131  eval-logloss:0.255436 
+## [205]    train-logloss:0.246988  eval-logloss:0.255323 
+## [206]    train-logloss:0.246785  eval-logloss:0.255198 
+## [207]    train-logloss:0.246654  eval-logloss:0.255142 
+## [208]    train-logloss:0.246446  eval-logloss:0.254996 
+## [209]    train-logloss:0.246348  eval-logloss:0.254931 
+## [210]    train-logloss:0.246165  eval-logloss:0.254786 
+## [211]    train-logloss:0.246066  eval-logloss:0.254720 
+## [212]    train-logloss:0.245736  eval-logloss:0.254513 
+## [213]    train-logloss:0.245664  eval-logloss:0.254461 
+## [214]    train-logloss:0.245561  eval-logloss:0.254392 
+## [215]    train-logloss:0.245443  eval-logloss:0.254317 
+## [216]    train-logloss:0.245350  eval-logloss:0.254269 
+## [217]    train-logloss:0.245291  eval-logloss:0.254218 
+## [218]    train-logloss:0.245140  eval-logloss:0.254094 
+## [219]    train-logloss:0.245043  eval-logloss:0.254024 
+## [220]    train-logloss:0.244958  eval-logloss:0.253995 
+## [221]    train-logloss:0.244816  eval-logloss:0.253876 
+## [222]    train-logloss:0.244724  eval-logloss:0.253781 
+## [223]    train-logloss:0.244631  eval-logloss:0.253751 
+## [224]    train-logloss:0.244537  eval-logloss:0.253714 
+## [225]    train-logloss:0.244319  eval-logloss:0.253570 
+## [226]    train-logloss:0.244271  eval-logloss:0.253525 
+## [227]    train-logloss:0.244172  eval-logloss:0.253476 
+## [228]    train-logloss:0.243901  eval-logloss:0.253316 
+## [229]    train-logloss:0.243468  eval-logloss:0.252916 
+## [230]    train-logloss:0.243359  eval-logloss:0.252854 
+## [231]    train-logloss:0.243128  eval-logloss:0.252656 
+## [232]    train-logloss:0.243014  eval-logloss:0.252604 
+## [233]    train-logloss:0.242899  eval-logloss:0.252531 
+## [234]    train-logloss:0.242803  eval-logloss:0.252462 
+## [235]    train-logloss:0.242729  eval-logloss:0.252427 
+## [236]    train-logloss:0.242608  eval-logloss:0.252370 
+## [237]    train-logloss:0.242505  eval-logloss:0.252246 
+## [238]    train-logloss:0.242442  eval-logloss:0.252237 
+## [239]    train-logloss:0.242388  eval-logloss:0.252198 
+## [240]    train-logloss:0.242301  eval-logloss:0.252162 
+## [241]    train-logloss:0.242122  eval-logloss:0.252029 
+## [242]    train-logloss:0.242017  eval-logloss:0.251973 
+## [243]    train-logloss:0.241912  eval-logloss:0.251963 
+## [244]    train-logloss:0.241832  eval-logloss:0.251919 
+## [245]    train-logloss:0.241757  eval-logloss:0.251886 
+## [246]    train-logloss:0.241623  eval-logloss:0.251735 
+## [247]    train-logloss:0.241422  eval-logloss:0.251580 
+## [248]    train-logloss:0.241294  eval-logloss:0.251530 
+## [249]    train-logloss:0.241198  eval-logloss:0.251479 
+## [250]    train-logloss:0.241083  eval-logloss:0.251455 
+## [251]    train-logloss:0.241011  eval-logloss:0.251452 
+## [252]    train-logloss:0.240952  eval-logloss:0.251435 
+## [253]    train-logloss:0.240864  eval-logloss:0.251411 
+## [254]    train-logloss:0.240798  eval-logloss:0.251365 
+## [255]    train-logloss:0.240726  eval-logloss:0.251334 
+## [256]    train-logloss:0.240644  eval-logloss:0.251325 
+## [257]    train-logloss:0.240581  eval-logloss:0.251282 
+## [258]    train-logloss:0.240530  eval-logloss:0.251265 
+## [259]    train-logloss:0.240439  eval-logloss:0.251249 
+## [260]    train-logloss:0.240344  eval-logloss:0.251190 
+## [261]    train-logloss:0.240243  eval-logloss:0.251130 
+## [262]    train-logloss:0.240180  eval-logloss:0.251085 
+## [263]    train-logloss:0.240051  eval-logloss:0.251027 
+## [264]    train-logloss:0.239997  eval-logloss:0.250988 
+## [265]    train-logloss:0.239946  eval-logloss:0.250946 
+## [266]    train-logloss:0.239896  eval-logloss:0.250938 
+## [267]    train-logloss:0.239820  eval-logloss:0.250942 
+## [268]    train-logloss:0.239737  eval-logloss:0.250919 
+## [269]    train-logloss:0.239605  eval-logloss:0.250850 
+## [270]    train-logloss:0.239430  eval-logloss:0.250766 
+## [271]    train-logloss:0.239347  eval-logloss:0.250700 
+## [272]    train-logloss:0.239209  eval-logloss:0.250536 
+## [273]    train-logloss:0.239145  eval-logloss:0.250500 
+## [274]    train-logloss:0.239077  eval-logloss:0.250475 
+## [275]    train-logloss:0.238913  eval-logloss:0.250437 
+## [276]    train-logloss:0.238818  eval-logloss:0.250377 
+## [277]    train-logloss:0.238773  eval-logloss:0.250296 
+## [278]    train-logloss:0.238610  eval-logloss:0.250191 
+## [279]    train-logloss:0.238536  eval-logloss:0.250150 
+## [280]    train-logloss:0.238387  eval-logloss:0.250089 
+## [281]    train-logloss:0.238253  eval-logloss:0.249994 
+## [282]    train-logloss:0.238192  eval-logloss:0.249965 
+## [283]    train-logloss:0.238129  eval-logloss:0.249915 
+## [284]    train-logloss:0.237912  eval-logloss:0.249700 
+## [285]    train-logloss:0.237826  eval-logloss:0.249651 
+## [286]    train-logloss:0.237748  eval-logloss:0.249606 
+## [287]    train-logloss:0.237627  eval-logloss:0.249539 
+## [288]    train-logloss:0.237560  eval-logloss:0.249467 
+## [289]    train-logloss:0.237396  eval-logloss:0.249404 
+## [290]    train-logloss:0.237302  eval-logloss:0.249388 
+## [291]    train-logloss:0.237185  eval-logloss:0.249319 
+## [292]    train-logloss:0.236925  eval-logloss:0.249084 
+## [293]    train-logloss:0.236772  eval-logloss:0.248994 
+## [294]    train-logloss:0.236700  eval-logloss:0.248941 
+## [295]    train-logloss:0.236631  eval-logloss:0.248927 
+## [296]    train-logloss:0.236567  eval-logloss:0.248899 
+## [297]    train-logloss:0.236526  eval-logloss:0.248872 
+## [298]    train-logloss:0.236235  eval-logloss:0.248733 
+## [299]    train-logloss:0.236032  eval-logloss:0.248620 
+## [300]    train-logloss:0.235962  eval-logloss:0.248576</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="modeling.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicción</span></span>
+<span id="cb29-2"><a href="modeling.html#cb29-2" aria-hidden="true" tabindex="-1"></a>xgb_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_model, Xb)</span>
+<span id="cb29-3"><a href="modeling.html#cb29-3" aria-hidden="true" tabindex="-1"></a>XGpred<span class="ot">&lt;-</span><span class="fu">data.frame</span>(y, xgb_pred)</span>
+<span id="cb29-4"><a href="modeling.html#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(XGpred)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;xgb_pred&quot;</span>)</span></code></pre></div>
+<p>Se muestran las evaluaciones del modelo, tanto in sample como out of sample, para las primeras y últimas iteraciones.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="modeling.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(XGpred<span class="sc">$</span>xgb_pred,XGpred<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] 0.2485761</code></pre>
+<p>Este modelo logró ganar el concurso con un error en los datasets de kaggle de 0.37598 y 0.37401.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="preparación-de-los-datos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusiones.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["final_bookdown.pdf", "final_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

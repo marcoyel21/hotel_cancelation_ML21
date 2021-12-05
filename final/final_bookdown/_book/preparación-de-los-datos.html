@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 3 Preparación de los Datos | Proyecto Final: Hotel Cancelation</title>
+  <meta name="description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 3 Preparación de los Datos | Proyecto Final: Hotel Cancelation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 3 Preparación de los Datos | Proyecto Final: Hotel Cancelation" />
+  
+  <meta name="twitter:description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  
+
+<meta name="author" content="Alex Joel Marco" />
+
+
+<meta name="date" content="2021-12-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="analisis-exploratorio-de-datos.html"/>
+<link rel="next" href="modeling.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#proyecto"><i class="fa fa-check"></i><b>1.1</b> Proyecto</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#descripción-del-problema"><i class="fa fa-check"></i><b>1.2</b> Descripción del problema</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo"><i class="fa fa-check"></i><b>1.3</b> Objetivo</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#fuente-de-datos"><i class="fa fa-check"></i><b>1.4</b> Fuente de datos</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#ambiente"><i class="fa fa-check"></i><b>1.5</b> Ambiente</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html"><i class="fa fa-check"></i><b>2</b> Analisis Exploratorio de Datos</a>
+<ul>
+<li class="chapter" data-level="2.0.1" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#cancelaciones-eda"><i class="fa fa-check"></i><b>2.0.1</b> Cancelaciones EDA</a></li>
+<li class="chapter" data-level="2.0.2" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#análisis-de-tendenciás-en-el-tiempo-eda"><i class="fa fa-check"></i><b>2.0.2</b> Análisis de tendenciás en el tiempo EDA</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html"><i class="fa fa-check"></i><b>3</b> Preparación de los Datos</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#preprocesamiento"><i class="fa fa-check"></i><b>3.0.1</b> Preprocesamiento</a></li>
+<li class="chapter" data-level="3.0.2" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#ingeniería-de-caracterísitcas"><i class="fa fa-check"></i><b>3.0.2</b> Ingeniería de caracterísitcas</a></li>
+<li class="chapter" data-level="3.1" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#cv"><i class="fa fa-check"></i><b>3.1</b> CV</a></li>
+<li class="chapter" data-level="3.2" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#nivelación-de-variables"><i class="fa fa-check"></i><b>3.2</b> Nivelación de variables</a></li>
+<li class="chapter" data-level="3.3" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#matrices-ralas"><i class="fa fa-check"></i><b>3.3</b> Matrices RALAS</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>4</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="modeling.html"><a href="modeling.html#cross-validated-lasso-logit"><i class="fa fa-check"></i><b>4.1</b> Cross-Validated LASSO-logit</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="modeling.html"><a href="modeling.html#grafica-lasso-de-los-coeficientes-vs-la-complejidad-del-modelo."><i class="fa fa-check"></i><b>4.1.1</b> Grafica Lasso de los coeficientes vs la complejidad del modelo.</a></li>
+<li class="chapter" data-level="4.1.2" data-path="modeling.html"><a href="modeling.html#hiper-parametro"><i class="fa fa-check"></i><b>4.1.2</b> Hiper parametro</a></li>
+<li class="chapter" data-level="4.1.3" data-path="modeling.html"><a href="modeling.html#variables"><i class="fa fa-check"></i><b>4.1.3</b> Variables</a></li>
+<li class="chapter" data-level="4.1.4" data-path="modeling.html"><a href="modeling.html#log-loss-test-oos"><i class="fa fa-check"></i><b>4.1.4</b> LOG LOSS test OOS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="modeling.html"><a href="modeling.html#xgboosting"><i class="fa fa-check"></i><b>4.2</b> XGBOOSTING</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>5</b> Conclusiones</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyecto Final: Hotel Cancelation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="preparación-de-los-datos" class="section level1" number="3">
+<h1><span class="header-section-number">Capitulo 3</span> Preparación de los Datos</h1>
+<div id="preprocesamiento" class="section level3" number="3.0.1">
+<h3><span class="header-section-number">3.0.1</span> Preprocesamiento</h3>
+<ul>
+<li><p>Muchos datos necesitan preprocesamiento sobretodo porque están codificados como “character” en lugar de “factor”: por ejemplo, las variables: arrival_date_year,arrival_date_month,arrival_date_week_number,meal,country,market_segment,distribution_channel,agent,company,customer_type, hotel,agent_company.reserved_room_type,assigned_room_type,deposit_type.</p></li>
+<li><p>Otros necesitan ser números: children</p></li>
+</ul>
+</div>
+<div id="ingeniería-de-caracterísitcas" class="section level3" number="3.0.2">
+<h3><span class="header-section-number">3.0.2</span> Ingeniería de caracterísitcas</h3>
+<p>Para el preprocesamiento de datos se agregaron variables que pensamos serían de utilidad. Entre estas nuevas variables se encuentran:</p>
+<ul>
+<li><p><strong>lead_time</strong>: Se cuentan los días de anticipación de la reserva y se divide en 4 grandes grupos del mismo tamaño.</p></li>
+<li><p><strong>dif_room</strong>: Esta variable toma en cuenta si la habitación reservada es la misma que la habitación asignada.</p></li>
+<li><p><strong>singles_adults</strong>: Indica si hay solo adultos (sin niños)</p></li>
+<li><p><strong>pascua, pascua_m1, …., pascua_m6 </strong>: indica si tal fecha era Pascua.</p></li>
+<li><p><strong>mag_tasa_can</strong>: Proporciona el ratio entre el total de cancelaciones respecto al total de reservaciones.</p></li>
+</ul>
+<p>** <strong>COMBINACIONES aleatorias</strong>: Incorporamos estas variables de combinaciones al azar buscando interaciones que ayudaran al modelo.*
+### Combinaciónes</p>
+<p>Asimismo exploramos distintas combinaciones pensando en que los modelos que ibamos a usar tenían la capacidad de seleccionar automáticamente las caracterísitcas más útiles.</p>
+<ul>
+<li><p><strong>dias_semana</strong>: Interaccion entre el día de reservación y el número de semana.</p></li>
+<li><p><strong>Agent_company</strong>: La combinación de agent y company.Esta resulto muy util en los casos donde ambas variables tenían valor NULL.</p></li>
+<li><p><strong>dif_room</strong>: Si el cuarto asignado es diferente al cuarto reservado.</p></li>
+<li><p><strong>week_day_sem</strong>: Combinación de día de la semana y número de semana.</p></li>
+<li><p><strong>week_daymonth</strong>: Combinación de día de la semana y número de semana.</p></li>
+<li><p><strong>Tasa de rechazo</strong>: Proporcion de reservaciones canceladas del total de reservaciones registradas.</p></li>
+<li><p><strong>market_dist</strong>: Combinación de market_segment y distribution_chanel.</p></li>
+<li><p><strong>cust_deposti</strong>:Combinación de customer_type y deposit_type.</p></li>
+<li><p><strong>cust_segment</strong>: Combinación de customer_type y market_segment.</p></li>
+<li><p><strong>lead_deposit</strong>: Combinación de lead y del tipo de deposito.</p></li>
+<li><p><strong>lead_week</strong>: Combinación de lead y número de semana de la reserva.</p></li>
+<li><p><strong>meal_reserv</strong>: Combinación de tipo de alimento y tipo de reserva.</p></li>
+<li><p><strong>country_month</strong>: Combinación del mes de la reserva y el país de origen.</p></li>
+</ul>
+</div>
+<div id="cv" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> CV</h2>
+<p>Ahora sobre el conjunto de entrenamiento guardaremos un cacho para probar.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="preparación-de-los-datos.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># proporción que queremos de training</span></span>
+<span id="cb4-2"><a href="preparación-de-los-datos.html#cb4-2" aria-hidden="true" tabindex="-1"></a>training_size <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb4-3"><a href="preparación-de-los-datos.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># filas de training</span></span>
+<span id="cb4-4"><a href="preparación-de-los-datos.html#cb4-4" aria-hidden="true" tabindex="-1"></a>training_rows <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(newdata_train)),</span>
+<span id="cb4-5"><a href="preparación-de-los-datos.html#cb4-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">size=</span><span class="fu">floor</span>(training_size<span class="sc">*</span><span class="fu">nrow</span>(newdata_train)))</span>
+<span id="cb4-6"><a href="preparación-de-los-datos.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#training set</span></span>
+<span id="cb4-7"><a href="preparación-de-los-datos.html#cb4-7" aria-hidden="true" tabindex="-1"></a>data_training <span class="ot">&lt;-</span> newdata_train[training_rows,]</span>
+<span id="cb4-8"><a href="preparación-de-los-datos.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#training cuenta con la y</span></span>
+<span id="cb4-9"><a href="preparación-de-los-datos.html#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="preparación-de-los-datos.html#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="preparación-de-los-datos.html#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#validation set</span></span>
+<span id="cb4-12"><a href="preparación-de-los-datos.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># la variable objetivo por separado</span></span>
+<span id="cb4-13"><a href="preparación-de-los-datos.html#cb4-13" aria-hidden="true" tabindex="-1"></a>data_validation <span class="ot">&lt;-</span> newdata_train[<span class="sc">-</span>training_rows,<span class="sc">-</span><span class="dv">1</span>] <span class="co">#sin la y</span></span>
+<span id="cb4-14"><a href="preparación-de-los-datos.html#cb4-14" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> newdata_train[<span class="sc">-</span>training_rows,<span class="dv">1</span>] </span></code></pre></div>
+</div>
+<div id="nivelación-de-variables" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Nivelación de variables</h2>
+<p>Antes de realizar la conversión a matrices ralas necesitamos indicarle a la computadora que las bases de datos cuentan con los mismas variables y dentro de cada variable categórica, los mismos niveles. Esto debido a que al hacer el CV, es muy probable que no todas las variables conserven la misma cantidad de niveles que la base completa antes del CV. Para ello creamos la siguiente función y la aplicamos a las bases de datos.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="preparación-de-los-datos.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creo una funcion para que las bases de datos cuenten con los mismos &quot;levels&quot;</span></span>
+<span id="cb5-2"><a href="preparación-de-los-datos.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># este paso es crucial para asegurarnos que traning, set y el modelo hablen &quot;el mismo idioma&quot;, es decir que tengan las mismas variables</span></span>
+<span id="cb5-3"><a href="preparación-de-los-datos.html#cb5-3" aria-hidden="true" tabindex="-1"></a>equallevels <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb5-4"><a href="preparación-de-los-datos.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.data.frame</span>(x) <span class="sc">&amp;</span> <span class="fu">is.data.frame</span>(y)) {</span>
+<span id="cb5-5"><a href="preparación-de-los-datos.html#cb5-5" aria-hidden="true" tabindex="-1"></a>        com <span class="ot">&lt;-</span> <span class="fu">intersect</span>(<span class="at">x =</span> <span class="fu">names</span>(x), <span class="at">y =</span> <span class="fu">names</span>(y))</span>
+<span id="cb5-6"><a href="preparación-de-los-datos.html#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (i <span class="cf">in</span> com) {</span>
+<span id="cb5-7"><a href="preparación-de-los-datos.html#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">levels</span>(y[[i]]))) {</span>
+<span id="cb5-8"><a href="preparación-de-los-datos.html#cb5-8" aria-hidden="true" tabindex="-1"></a>                x[[i]] <span class="ot">&lt;-</span> <span class="fu">factor</span>(x[[i]], <span class="at">levels =</span> <span class="fu">levels</span>(y[[i]]))</span>
+<span id="cb5-9"><a href="preparación-de-los-datos.html#cb5-9" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb5-10"><a href="preparación-de-los-datos.html#cb5-10" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-11"><a href="preparación-de-los-datos.html#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(x)</span>
+<span id="cb5-12"><a href="preparación-de-los-datos.html#cb5-12" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb5-13"><a href="preparación-de-los-datos.html#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">stop</span>(<span class="st">&quot;`x` and `y` must be a data.frame.&quot;</span>)</span>
+<span id="cb5-14"><a href="preparación-de-los-datos.html#cb5-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-15"><a href="preparación-de-los-datos.html#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="matrices-ralas" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Matrices RALAS</h2>
+<p>Para el procesamiento de los datos previo al modelaje se hizo <a href="https://www.educative.io/blog/one-hot-encoding">one hot encoding</a>, el cuál consiste en transformar las variables categóricas en variables dummy. Cómo ya se mencionó en el EDA, existen variables con muchísimas categorías (country, agent, company). Lo cual nos deja con un data frame lleno de muchos ceros. Para manejar este “data frame” o “matriz” con muchos ceros se hizo uso de las <a href="http://amunategui.github.io/sparse-matrix-glmnet/">matrices Ralas</a> las cuales concervan únicamente las entradas con valores distintos de cero. Para ello se utilizó la función <strong>sparse.model.matrix</strong> de la librería <a href="https://cran.rproject.org/web/packages/Matrix/index.html">Matrix</a>. La implementación del código completa la puede ver en la siguiente liga <a href="https://github.com/marcoyel21/hotel_cancelation_ML21/blob/main/final/modelo_final%20.Rmd">Model</a>.</p>
+<center>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="preparación-de-los-datos.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#![Ejemplo trasfomación matriz a matriz ralas ](ralas.png)</span></span></code></pre></div>
+</center>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="preparación-de-los-datos.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Matriz de covariates</span></span>
+<span id="cb7-2"><a href="preparación-de-los-datos.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#data_training&lt;-sample_train</span></span>
+<span id="cb7-3"><a href="preparación-de-los-datos.html#cb7-3" aria-hidden="true" tabindex="-1"></a>Xa <span class="ot">&lt;-</span>data_training <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="dv">1</span>) <span class="co">#training menos y</span></span>
+<span id="cb7-4"><a href="preparación-de-los-datos.html#cb7-4" aria-hidden="true" tabindex="-1"></a>Xb <span class="ot">&lt;-</span>data_validation</span>
+<span id="cb7-5"><a href="preparación-de-los-datos.html#cb7-5" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span><span class="fu">equallevels</span>(newdata_test,Xa)</span>
+<span id="cb7-6"><a href="preparación-de-los-datos.html#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="preparación-de-los-datos.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#para manejo de nas, si lo quito, por alguna razon la conversion a matriz rala me quita unas obs</span></span>
+<span id="cb7-8"><a href="preparación-de-los-datos.html#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="preparación-de-los-datos.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">na.action=</span><span class="st">&#39;na.pass&#39;</span>)</span></code></pre></div>
+<p>Ahora creo 3 matrices ralas para entrenamiento, validación y prueba.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="preparación-de-los-datos.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#se quita intercepto</span></span>
+<span id="cb8-2"><a href="preparación-de-los-datos.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#se ponen todas las columnas</span></span>
+<span id="cb8-3"><a href="preparación-de-los-datos.html#cb8-3" aria-hidden="true" tabindex="-1"></a>Xa <span class="ot">&lt;-</span> <span class="fu">sparse.model.matrix</span>(<span class="sc">~</span>.<span class="sc">+</span><span class="dv">0</span>, <span class="at">data =</span> Xa)</span>
+<span id="cb8-4"><a href="preparación-de-los-datos.html#cb8-4" aria-hidden="true" tabindex="-1"></a>Xb <span class="ot">&lt;-</span> <span class="fu">sparse.model.matrix</span>(<span class="sc">~</span>.<span class="sc">+</span><span class="dv">0</span>, <span class="at">data =</span> Xb)</span>
+<span id="cb8-5"><a href="preparación-de-los-datos.html#cb8-5" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> <span class="fu">sparse.model.matrix</span>(<span class="sc">~</span>.<span class="sc">+</span><span class="dv">0</span>, <span class="at">data =</span> Xc)</span>
+<span id="cb8-6"><a href="preparación-de-los-datos.html#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="preparación-de-los-datos.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#vector de Y´s</span></span>
+<span id="cb8-8"><a href="preparación-de-los-datos.html#cb8-8" aria-hidden="true" tabindex="-1"></a>Ya<span class="ot">&lt;-</span>data_training<span class="sc">$</span>y</span></code></pre></div>
+<p>Ahora tengo 3 matrices con una alta cantidad de variables(4,347) (debido al one hot encoding y a la nivelación) para cada dataset del CV. Esto pensando en el feature seleccion que los modelos pueden hacer. Ahora puedo aplicarles cualquier modelo de manera muy ordenada y simple.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="analisis-exploratorio-de-datos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["final_bookdown.pdf", "final_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

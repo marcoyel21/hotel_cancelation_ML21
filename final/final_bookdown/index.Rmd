@@ -32,13 +32,15 @@ Predecir cuáles reservaciones son probables que terminen o no en cancelación.
 
 ## Fuente de datos
 
-Los datos que se utilizaron para este proyecto fueron obtenidos del sitio
+Los datos que se utilizaron para este proyecto fueron obtenidos del sitio [Kaggle](https://www.kaggle.com/c/cancelaciones-en-hoteles/data).
 
-https://www.kaggle.com/c/cancelaciones-en-hoteles/data
 
-Los datos originales provienen de Hotel booking demand datasets, Antonio, de Almeida, Nunes (https://www.sciencedirect.com/science/article/pii/S2352340918315191)
+Los datos originales provienen de [Hotel](https://www.sciencedirect.com/science/article/pii/S2352340918315191) booking demand datasets, Antonio, de Almeida, Nunes. 
 
 ## Ambiente
+```{r, include = FALSE}
+library('bookdown')
+```
 
 
 ```{r, echo=TRUE, include = FALSE}
@@ -79,7 +81,7 @@ cal <- data[idx == 3,]
 
 
 
-# Analisis Exploratorio de Datos
+# Análisis Exploratorio de Datos
 
 
 Con el fin de entender los datos realizamos una revisión general de estos (solamente de la base de datos de entrenamiento posterior a haberla dividido en entrenamiento, validación y prueba) y tratamos de identificar aquellas variables que pudieran ser interesantes para nuestro estudio. A continuación se muestra una breve parte de la exploración de datos. Si desea consultar el análisis completo puede encontrarlo en la siguiente liga [EDA](https://github.com/marcoyel21/hotel_cancelation_ML21/blob/main/final/EDA_Cancelaciones.Rmd).
@@ -186,9 +188,9 @@ plot_grid(hist1, hist2 ,
 **Country:** esta variable presenta un dato totalmente atípico en la categoría PRT por lo que es importante considerarla ya que podría explicar una porción importante de las cancelaciones.
 
 <center>
-```{r}
+
 #![ ](country.png) 
-```
+
 
 </center>
 
@@ -672,9 +674,9 @@ Para el procesamiento de los datos previo al modelaje se hizo [one hot encoding]
 
 <center>
 
-```{r}
+
 #![Ejemplo trasfomación matriz a matriz ralas ](ralas.png)
-```
+
 
 </center>
 
@@ -837,3 +839,16 @@ Este modelo logró ganar el concurso con un error en los datasets de kaggle de  
 + El usar matrices ralas nos permitio experimentar muy rapido con los modelos pues reducen el tiempo de entrenamiento. Sin embargo debemos tratar las bases de datos con mucho cuidado. Por ejemplo, se necesitavan nivelar las columnas para que las matrices tuvieran las mismas dimensiones.
 
 + Se puede explotar al máximo la capacidad de cada modelo de ML de seleccionar las variables (y en consecuencia de crear bases de datos de alta dimensión) sin embargo se debe comprender el cómo lo hacen. En nuestro caso, esto implicaba indicarle al modelo que queremos un  colsample por cada arbol alto: del 70% y que debemos limitar el tamaño de cada arbol en no más de 6 niveles.
+
+# Referencias 
+
+* [Kaggle](https://www.kaggle.com/c/cancelaciones-en-hoteles/data)
+* [Hotel](https://www.sciencedirect.com/science/article/pii/S2352340918315191)
+* [Series de tiempo](https://es.wikipedia.org/wiki/Serie_temporal)
+* [One hot encoding](https://www.educative.io/blog/one-hot-encoding)
+* [Matrices Ralas]( http://amunategui.github.io/sparse-matrix-glmnet/)
+* [Matrix](https://cran.rproject.org/web/packages/Matrix/index.html)
+* 
+* 
+* 
+* 

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Capitulo 2 Analisis Exploratorio de Datos | Proyecto Final: Hotel Cancelation</title>
   <meta name="description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Capitulo 2 Analisis Exploratorio de Datos | Proyecto Final: Hotel Cancelation" />
   <meta property="og:type" content="book" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="preparación-de-los-datos.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -42,7 +43,6 @@
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
 
 
 
@@ -382,7 +382,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <p>Usamos la función skim en la base de datos de entrenamiento para conocer las características generales de cada variable.</p>
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 2.1: </span>Data summary</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 2.1: </span>Data summary</caption>
 <tbody>
 <tr class="odd">
 <td align="left">Name</td>
@@ -827,21 +827,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="analisis-exploratorio-de-datos.html#cb1-1" aria-hidden="true" tabindex="-1"></a>sub_cancelados <span class="ot">&lt;-</span> <span class="fu">subset</span>(train, is_canceled <span class="sc">==</span> <span class="st">&quot;cancelado&quot;</span>)</span></code></pre></div>
 <p>Iniciamos con la revisión de los histogramas de cada variable para ver si podemos identificar algun compartamiento interesante. A continuación se muestran los histogramas de las variables más interesantes a nuestro criterio, nuevamente puede consultar la exploración completa de los datos en <a href="https://github.com/marcoyel21/hotel_cancelation_ML21/blob/main/final/EDA_Cancelaciones.Rmd">EDA</a>.</p>
 <p><strong>Lead_time:</strong> la distribución de sus datos no tiene un comportamiento lógico, porque el mayor número de cancelaciones proviene de o días previos de reservación, pero luego se mueve a valores de 90 días, 40 días y luego regresa a 2 días. será importante ver si existe algún patrón en esta variable.</p>
-<p><img src="final_bookdown_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p><strong>Agregar comparacion poblaciones</strong> ##########################################
 #################################################</p>
 <p><strong>Country:</strong> esta variable presenta un dato totalmente atípico en la categoría PRT por lo que es importante considerarla ya que podría explicar una porción importante de las cancelaciones.</p>
 <center>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="analisis-exploratorio-de-datos.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#![ ](country.png) </span></span></code></pre></div>
+<p>#<img src="country.png" /></p>
 </center>
 <p><strong>Deposit_type:</strong> aqui hay otro caso ilógico, ya que la categoría de no rembolsable está muy por arriba de los rembolsable, uno pensaría que debería ser menos frecuenta la cancelación si no te van a devolver tu dinero. por lo que es otra variable importante.</p>
 <p><img src="final_bookdown_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Analisando la variable <strong>deposit_type</strong>, se extrae el subset de deposit_type cancelados. Revisamos los porcentajes de cada categoría en las otras variables y observamos que el 97% de las cancelaciones sin rembolso pertenecen al país PRT.</p>
 <pre><code>## 
-##          BEL           CN          ESP          FRA          GBR         NULL 
-## 0.0023939808 0.0010259918 0.0119699042 0.0003419973 0.0109439124 0.0006839945 
-##          POL          PRT 
-## 0.0023939808 0.9702462380</code></pre>
+##         BEL          CN         ESP         FRA         GBR        NULL 
+## 0.001370802 0.000685401 0.010281014 0.001028101 0.010966415 0.002398903 
+##         POL         PRT 
+## 0.002056203 0.971213160</code></pre>
 <p><strong>Joel</strong> añadir descubrimientos agent 1 portugal discucsión</p>
 </div>
 <div id="análisis-de-tendenciás-en-el-tiempo-eda" class="section level3" number="2.0.2">
@@ -866,7 +866,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -906,6 +905,10 @@ gitbook.start({
 "text": null
 },
 "download": ["final_bookdown.pdf", "final_bookdown.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

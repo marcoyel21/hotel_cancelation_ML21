@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation</title>
   <meta name="description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation" />
   <meta property="og:type" content="book" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="preparación-de-los-datos.html"/>
 <link rel="next" href="conclusiones.html"/>
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -42,7 +43,6 @@
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
 
 
 
@@ -196,39 +196,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="cross-validated-lasso-logit" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Cross-Validated LASSO-logit</h2>
 <p>Seestima un cross validated LASSO y se muestra el la gráfica de CV Binomial Deviance vs Complejidad</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="modeling.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#CV LASSO</span></span>
-<span id="cb9-2"><a href="modeling.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># se hacen 5 folds </span></span>
-<span id="cb9-3"><a href="modeling.html#cb9-3" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="ot">&lt;-</span><span class="fu">cv.gamlr</span>(<span class="at">x =</span> Xa, <span class="at">y =</span> Ya, <span class="at">verb =</span> T, <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>, <span class="at">nfold =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="modeling.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#CV LASSO</span></span>
+<span id="cb7-2"><a href="modeling.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># se hacen 5 folds </span></span>
+<span id="cb7-3"><a href="modeling.html#cb7-3" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="ot">&lt;-</span><span class="fu">cv.gamlr</span>(<span class="at">x =</span> Xa, <span class="at">y =</span> Ya, <span class="at">verb =</span> T, <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>, <span class="at">nfold =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## Warning in gamlr(x, y, ...): numerically perfect fit for some observations.</code></pre>
 <pre><code>## fold 1,2,3,4,5,done.</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="modeling.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Grafica</span></span>
-<span id="cb12-2"><a href="modeling.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a)</span></code></pre></div>
-<p><img src="final_bookdown_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="modeling.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Grafica</span></span>
+<span id="cb10-2"><a href="modeling.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a)</span></code></pre></div>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <div id="grafica-lasso-de-los-coeficientes-vs-la-complejidad-del-modelo." class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Grafica Lasso de los coeficientes vs la complejidad del modelo.</h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="modeling.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a<span class="sc">$</span>gamlr)</span></code></pre></div>
-<p><img src="final_bookdown_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="modeling.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a<span class="sc">$</span>gamlr)</span></code></pre></div>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 </div>
 <div id="hiper-parametro" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Hiper parametro</h3>
 <p>Automaticamente se elige el lambda que minimiza la devianza OOS.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modeling.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificador para el lambda deseado</span></span>
-<span id="cb14-2"><a href="modeling.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Valor del lambda deseado</span></span>
-<span id="cb14-3"><a href="modeling.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#lambda resultante</span></span>
-<span id="cb14-4"><a href="modeling.html#cb14-4" aria-hidden="true" tabindex="-1"></a>a_lambda<span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>))</span>
-<span id="cb14-5"><a href="modeling.html#cb14-5" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="sc">$</span>gamlr<span class="sc">$</span>lambda[a_lambda]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="modeling.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificador para el lambda deseado</span></span>
+<span id="cb12-2"><a href="modeling.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Valor del lambda deseado</span></span>
+<span id="cb12-3"><a href="modeling.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#lambda resultante</span></span>
+<span id="cb12-4"><a href="modeling.html#cb12-4" aria-hidden="true" tabindex="-1"></a>a_lambda<span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>))</span>
+<span id="cb12-5"><a href="modeling.html#cb12-5" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="sc">$</span>gamlr<span class="sc">$</span>lambda[a_lambda]</span></code></pre></div>
 <pre><code>##     seg100 
 ## 0.00243361</code></pre>
 </div>
 <div id="variables" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Variables</h3>
 <p>A continuacion una tabla con los coeficientes que se selecciona para el CV LASSO. Que sorprendentemente solo fueron 561.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="modeling.html#cb16-1" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>, <span class="at">k=</span><span class="dv">2</span>, <span class="at">corrected=</span><span class="cn">TRUE</span>)</span>
-<span id="cb16-2"><a href="modeling.html#cb16-2" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(coefs[,<span class="dv">1</span>])</span>
-<span id="cb16-3"><a href="modeling.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(coefs)<span class="ot">&lt;-</span><span class="st">&quot;valor&quot;</span></span>
-<span id="cb16-4"><a href="modeling.html#cb16-4" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span>coefs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(valor <span class="sc">!=</span><span class="dv">0</span>)</span>
-<span id="cb16-5"><a href="modeling.html#cb16-5" aria-hidden="true" tabindex="-1"></a>modelvariables<span class="ot">&lt;-</span><span class="fu">row.names</span>(coefs)</span>
-<span id="cb16-6"><a href="modeling.html#cb16-6" aria-hidden="true" tabindex="-1"></a>modelvariables</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modeling.html#cb14-1" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>, <span class="at">k=</span><span class="dv">2</span>, <span class="at">corrected=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="modeling.html#cb14-2" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(coefs[,<span class="dv">1</span>])</span>
+<span id="cb14-3"><a href="modeling.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(coefs)<span class="ot">&lt;-</span><span class="st">&quot;valor&quot;</span></span>
+<span id="cb14-4"><a href="modeling.html#cb14-4" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span>coefs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(valor <span class="sc">!=</span><span class="dv">0</span>)</span>
+<span id="cb14-5"><a href="modeling.html#cb14-5" aria-hidden="true" tabindex="-1"></a>modelvariables<span class="ot">&lt;-</span><span class="fu">row.names</span>(coefs)</span>
+<span id="cb14-6"><a href="modeling.html#cb14-6" aria-hidden="true" tabindex="-1"></a>modelvariables</span></code></pre></div>
 <pre><code>##   [1] &quot;intercept&quot;                     &quot;lead_time&quot;                    
 ##   [3] &quot;arrival_date_year2015&quot;         &quot;arrival_date_year2017&quot;        
 ##   [5] &quot;arrival_date_monthDecember&quot;    &quot;arrival_date_monthJune&quot;       
@@ -415,7 +415,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [367] &quot;tasa_canc&quot;                     &quot;market_dist3_TA_TO&quot;           
 ## [369] &quot;market_dist8_5&quot;                &quot;market_distOfflineTA_TO_TA_TO&quot;
 ## [371] &quot;cust_depostiTransient_B&quot;       &quot;cust_segmentContract_7&quot;       
-## [373] &quot;cust_segmentTransient_7&quot;       &quot;cust_segmentTransient-Party_7&quot;
+## [373] &quot;cust_segmentTransient-Party_7&quot; &quot;cust_segmentTransient_7&quot;      
 ## [375] &quot;lead_depositA_[ 16, 59)&quot;       &quot;lead_depositA_[ 59,146)&quot;      
 ## [377] &quot;lead_depositA_[146,737]&quot;       &quot;lead_depositB_[ 59,146)&quot;      
 ## [379] &quot;lead_week1_[ 59,146)&quot;          &quot;lead_week1_[146,737]&quot;         
@@ -517,25 +517,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="log-loss-test-oos" class="section level3" number="4.1.4">
 <h3><span class="header-section-number">4.1.4</span> LOG LOSS test OOS</h3>
 <p>Ahora pruebo el error log loss del lasso</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="modeling.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Predicciones</span></span>
-<span id="cb18-2"><a href="modeling.html#cb18-2" aria-hidden="true" tabindex="-1"></a>lasso_score <span class="ot">&lt;-</span> <span class="fu">predict</span>(cvlasso_a,</span>
-<span id="cb18-3"><a href="modeling.html#cb18-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">newdata =</span> Xb,</span>
-<span id="cb18-4"><a href="modeling.html#cb18-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">type=</span><span class="st">&quot;response&quot;</span>,</span>
-<span id="cb18-5"><a href="modeling.html#cb18-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">select =</span> <span class="st">&quot;min&quot;</span> )</span>
-<span id="cb18-6"><a href="modeling.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="modeling.html#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="modeling.html#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe</span></span>
-<span id="cb18-9"><a href="modeling.html#cb18-9" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, lasso_score)</span>
-<span id="cb18-10"><a href="modeling.html#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(lasso_validation)[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;lasso_score&#39;</span>)</span>
-<span id="cb18-11"><a href="modeling.html#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="modeling.html#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MLmetrics)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="modeling.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Predicciones</span></span>
+<span id="cb16-2"><a href="modeling.html#cb16-2" aria-hidden="true" tabindex="-1"></a>lasso_score <span class="ot">&lt;-</span> <span class="fu">predict</span>(cvlasso_a,</span>
+<span id="cb16-3"><a href="modeling.html#cb16-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">newdata =</span> Xb,</span>
+<span id="cb16-4"><a href="modeling.html#cb16-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">type=</span><span class="st">&quot;response&quot;</span>,</span>
+<span id="cb16-5"><a href="modeling.html#cb16-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">select =</span> <span class="st">&quot;min&quot;</span> )</span>
+<span id="cb16-6"><a href="modeling.html#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="modeling.html#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="modeling.html#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe</span></span>
+<span id="cb16-9"><a href="modeling.html#cb16-9" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, lasso_score)</span>
+<span id="cb16-10"><a href="modeling.html#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(lasso_validation)[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;lasso_score&#39;</span>)</span>
+<span id="cb16-11"><a href="modeling.html#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="modeling.html#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MLmetrics)</span></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;MLmetrics&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:base&#39;:
 ## 
 ##     Recall</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="modeling.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(lasso_validation<span class="sc">$</span>lasso_score,lasso_validation<span class="sc">$</span>y)</span></code></pre></div>
-<pre><code>## [1] 0.3079782</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="modeling.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(lasso_validation<span class="sc">$</span>lasso_score,lasso_validation<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] 0.307977</code></pre>
 <p>Nos dio un error sorprendetemente muy pequeño. Con este modelo logramos realizar un error de 0.41872 y 0.42131 en los datos de test de Kaggle.</p>
 </div>
 </div>
@@ -544,8 +544,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Sin embargo, para ganar el concurso optamos por explorar otros modelos que generalmente tienen mayor potencial de ganar este tipo de concursos: XG boosting.</p>
 <p>En este caso, se eligieron los hiperparametros mediante un tuning manual explorando el comportamiento del error cuando se fijaban todos los hp excepto uno. De esta manera se fijo la profunidad máxima del arbol en 6 y el learning rate en .06.</p>
 <p>Debido a la alta cantidad de variables de las bases de datos (y pues que muchas son poco informativas) el colsample por cada arbol generado es alto: del 70%. De haber tenido solo variables muy informativas pues bajariamos ese porcentaje, sin embargo quicimos explitar la capacidad del modelo de seleccionar por si solo las variables.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="modeling.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de entrenamiento</span></span>
-<span id="cb23-2"><a href="modeling.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="modeling.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de entrenamiento</span></span>
+<span id="cb21-2"><a href="modeling.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span></code></pre></div>
+<pre><code>## Warning: package &#39;xgboost&#39; was built under R version 4.1.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;xgboost&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:plotly&#39;:
@@ -554,336 +555,336 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     slice</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="modeling.html#cb27-1" aria-hidden="true" tabindex="-1"></a>dtrain <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xa, <span class="at">label =</span> Ya) </span>
-<span id="cb27-2"><a href="modeling.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Label es el target</span></span>
-<span id="cb27-3"><a href="modeling.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de validación</span></span>
-<span id="cb27-4"><a href="modeling.html#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="modeling.html#cb27-5" aria-hidden="true" tabindex="-1"></a>dtest <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xb, <span class="at">label =</span> y)</span>
-<span id="cb27-6"><a href="modeling.html#cb27-6" aria-hidden="true" tabindex="-1"></a>watchlist <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">train =</span> dtrain, <span class="at">eval =</span> dtest) </span>
-<span id="cb27-7"><a href="modeling.html#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Para evaluar el performance del modelo</span></span>
-<span id="cb27-8"><a href="modeling.html#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-9"><a href="modeling.html#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-10"><a href="modeling.html#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenamiento del modelo</span></span>
-<span id="cb27-11"><a href="modeling.html#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-12"><a href="modeling.html#cb27-12" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">max_depth =</span> <span class="dv">6</span>, <span class="at">learning_rate =</span> <span class="fl">0.06</span>, </span>
-<span id="cb27-13"><a href="modeling.html#cb27-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">objective =</span> <span class="st">&quot;binary:logistic&quot;</span>,</span>
-<span id="cb27-14"><a href="modeling.html#cb27-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">eval_metric =</span> <span class="st">&quot;logloss&quot;</span>, <span class="at">subsample =</span> <span class="fl">0.6</span>, <span class="at">colsample_bytree =</span> <span class="fl">0.7</span>)</span>
-<span id="cb27-15"><a href="modeling.html#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="modeling.html#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-17"><a href="modeling.html#cb27-17" aria-hidden="true" tabindex="-1"></a>xgb_model <span class="ot">&lt;-</span> <span class="fu">xgb.train</span>(<span class="at">params =</span> param, dtrain, </span>
-<span id="cb27-18"><a href="modeling.html#cb27-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">early_stopping_rounds =</span>  <span class="dv">10</span>, </span>
-<span id="cb27-19"><a href="modeling.html#cb27-19" aria-hidden="true" tabindex="-1"></a>                       <span class="at">nrounds =</span> <span class="dv">300</span>,</span>
-<span id="cb27-20"><a href="modeling.html#cb27-20" aria-hidden="true" tabindex="-1"></a>                 watchlist)</span></code></pre></div>
-<pre><code>## [1]  train-logloss:0.661126  eval-logloss:0.661290 
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="modeling.html#cb26-1" aria-hidden="true" tabindex="-1"></a>dtrain <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xa, <span class="at">label =</span> Ya) </span>
+<span id="cb26-2"><a href="modeling.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Label es el target</span></span>
+<span id="cb26-3"><a href="modeling.html#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de validación</span></span>
+<span id="cb26-4"><a href="modeling.html#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="modeling.html#cb26-5" aria-hidden="true" tabindex="-1"></a>dtest <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xb, <span class="at">label =</span> y)</span>
+<span id="cb26-6"><a href="modeling.html#cb26-6" aria-hidden="true" tabindex="-1"></a>watchlist <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">train =</span> dtrain, <span class="at">eval =</span> dtest) </span>
+<span id="cb26-7"><a href="modeling.html#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Para evaluar el performance del modelo</span></span>
+<span id="cb26-8"><a href="modeling.html#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="modeling.html#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="modeling.html#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenamiento del modelo</span></span>
+<span id="cb26-11"><a href="modeling.html#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="modeling.html#cb26-12" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">max_depth =</span> <span class="dv">6</span>, <span class="at">learning_rate =</span> <span class="fl">0.06</span>, </span>
+<span id="cb26-13"><a href="modeling.html#cb26-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">objective =</span> <span class="st">&quot;binary:logistic&quot;</span>,</span>
+<span id="cb26-14"><a href="modeling.html#cb26-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">eval_metric =</span> <span class="st">&quot;logloss&quot;</span>, <span class="at">subsample =</span> <span class="fl">0.6</span>, <span class="at">colsample_bytree =</span> <span class="fl">0.7</span>)</span>
+<span id="cb26-15"><a href="modeling.html#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="modeling.html#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="modeling.html#cb26-17" aria-hidden="true" tabindex="-1"></a>xgb_model <span class="ot">&lt;-</span> <span class="fu">xgb.train</span>(<span class="at">params =</span> param, dtrain, </span>
+<span id="cb26-18"><a href="modeling.html#cb26-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">early_stopping_rounds =</span>  <span class="dv">10</span>, </span>
+<span id="cb26-19"><a href="modeling.html#cb26-19" aria-hidden="true" tabindex="-1"></a>                       <span class="at">nrounds =</span> <span class="dv">300</span>,</span>
+<span id="cb26-20"><a href="modeling.html#cb26-20" aria-hidden="true" tabindex="-1"></a>                 watchlist)</span></code></pre></div>
+<pre><code>## [1]  train-logloss:0.663222  eval-logloss:0.662965 
 ## Multiple eval metrics are present. Will use eval_logloss for early stopping.
 ## Will train until eval_logloss hasn&#39;t improved in 10 rounds.
 ## 
-## [2]  train-logloss:0.633231  eval-logloss:0.633172 
-## [3]  train-logloss:0.607968  eval-logloss:0.607971 
-## [4]  train-logloss:0.585377  eval-logloss:0.585257 
-## [5]  train-logloss:0.564903  eval-logloss:0.564549 
-## [6]  train-logloss:0.548370  eval-logloss:0.547907 
-## [7]  train-logloss:0.532065  eval-logloss:0.531632 
-## [8]  train-logloss:0.516597  eval-logloss:0.516088 
-## [9]  train-logloss:0.503581  eval-logloss:0.503086 
-## [10] train-logloss:0.491568  eval-logloss:0.490988 
-## [11] train-logloss:0.477888  eval-logloss:0.477429 
-## [12] train-logloss:0.467147  eval-logloss:0.466648 
-## [13] train-logloss:0.458369  eval-logloss:0.457845 
-## [14] train-logloss:0.447752  eval-logloss:0.447146 
-## [15] train-logloss:0.437190  eval-logloss:0.436739 
-## [16] train-logloss:0.427902  eval-logloss:0.427458 
-## [17] train-logloss:0.421164  eval-logloss:0.420661 
-## [18] train-logloss:0.414854  eval-logloss:0.414284 
-## [19] train-logloss:0.406952  eval-logloss:0.406353 
-## [20] train-logloss:0.399499  eval-logloss:0.398982 
-## [21] train-logloss:0.393575  eval-logloss:0.393009 
-## [22] train-logloss:0.388775  eval-logloss:0.388227 
-## [23] train-logloss:0.382531  eval-logloss:0.381928 
-## [24] train-logloss:0.377167  eval-logloss:0.376684 
-## [25] train-logloss:0.372310  eval-logloss:0.371952 
-## [26] train-logloss:0.368713  eval-logloss:0.368232 
-## [27] train-logloss:0.364642  eval-logloss:0.364151 
-## [28] train-logloss:0.361578  eval-logloss:0.361061 
-## [29] train-logloss:0.357005  eval-logloss:0.356515 
-## [30] train-logloss:0.354167  eval-logloss:0.353682 
-## [31] train-logloss:0.351240  eval-logloss:0.350763 
-## [32] train-logloss:0.347753  eval-logloss:0.347392 
-## [33] train-logloss:0.342930  eval-logloss:0.342696 
-## [34] train-logloss:0.339237  eval-logloss:0.338993 
-## [35] train-logloss:0.336474  eval-logloss:0.336195 
-## [36] train-logloss:0.334657  eval-logloss:0.334449 
-## [37] train-logloss:0.332689  eval-logloss:0.332532 
-## [38] train-logloss:0.329575  eval-logloss:0.329601 
-## [39] train-logloss:0.327522  eval-logloss:0.327603 
-## [40] train-logloss:0.325327  eval-logloss:0.325409 
-## [41] train-logloss:0.323664  eval-logloss:0.323906 
-## [42] train-logloss:0.320963  eval-logloss:0.321163 
-## [43] train-logloss:0.318701  eval-logloss:0.319025 
-## [44] train-logloss:0.317154  eval-logloss:0.317435 
-## [45] train-logloss:0.315915  eval-logloss:0.316161 
-## [46] train-logloss:0.313681  eval-logloss:0.313951 
-## [47] train-logloss:0.311841  eval-logloss:0.312160 
-## [48] train-logloss:0.310537  eval-logloss:0.310874 
-## [49] train-logloss:0.308272  eval-logloss:0.308666 
-## [50] train-logloss:0.306960  eval-logloss:0.307392 
-## [51] train-logloss:0.305617  eval-logloss:0.306124 
-## [52] train-logloss:0.304651  eval-logloss:0.305219 
-## [53] train-logloss:0.303150  eval-logloss:0.303775 
-## [54] train-logloss:0.302002  eval-logloss:0.302679 
-## [55] train-logloss:0.300560  eval-logloss:0.301315 
-## [56] train-logloss:0.299771  eval-logloss:0.300580 
-## [57] train-logloss:0.298658  eval-logloss:0.299494 
-## [58] train-logloss:0.297638  eval-logloss:0.298431 
-## [59] train-logloss:0.296941  eval-logloss:0.297746 
-## [60] train-logloss:0.295331  eval-logloss:0.296192 
-## [61] train-logloss:0.294501  eval-logloss:0.295385 
-## [62] train-logloss:0.293787  eval-logloss:0.294727 
-## [63] train-logloss:0.292908  eval-logloss:0.293870 
-## [64] train-logloss:0.291310  eval-logloss:0.292313 
-## [65] train-logloss:0.290722  eval-logloss:0.291701 
-## [66] train-logloss:0.290166  eval-logloss:0.291167 
-## [67] train-logloss:0.289431  eval-logloss:0.290470 
-## [68] train-logloss:0.288713  eval-logloss:0.289840 
-## [69] train-logloss:0.287995  eval-logloss:0.289198 
-## [70] train-logloss:0.287229  eval-logloss:0.288457 
-## [71] train-logloss:0.286697  eval-logloss:0.287925 
-## [72] train-logloss:0.286294  eval-logloss:0.287567 
-## [73] train-logloss:0.285455  eval-logloss:0.286788 
-## [74] train-logloss:0.284674  eval-logloss:0.286143 
-## [75] train-logloss:0.284171  eval-logloss:0.285645 
-## [76] train-logloss:0.283340  eval-logloss:0.284832 
-## [77] train-logloss:0.282914  eval-logloss:0.284492 
-## [78] train-logloss:0.281889  eval-logloss:0.283639 
-## [79] train-logloss:0.281391  eval-logloss:0.283165 
-## [80] train-logloss:0.280639  eval-logloss:0.282432 
-## [81] train-logloss:0.279928  eval-logloss:0.281787 
-## [82] train-logloss:0.279075  eval-logloss:0.281033 
-## [83] train-logloss:0.278711  eval-logloss:0.280728 
-## [84] train-logloss:0.278267  eval-logloss:0.280322 
-## [85] train-logloss:0.277945  eval-logloss:0.280035 
-## [86] train-logloss:0.277669  eval-logloss:0.279760 
-## [87] train-logloss:0.277379  eval-logloss:0.279460 
-## [88] train-logloss:0.276993  eval-logloss:0.279092 
-## [89] train-logloss:0.276437  eval-logloss:0.278533 
-## [90] train-logloss:0.276153  eval-logloss:0.278289 
-## [91] train-logloss:0.275509  eval-logloss:0.277802 
-## [92] train-logloss:0.275200  eval-logloss:0.277603 
-## [93] train-logloss:0.274869  eval-logloss:0.277277 
-## [94] train-logloss:0.274432  eval-logloss:0.276912 
-## [95] train-logloss:0.274129  eval-logloss:0.276637 
-## [96] train-logloss:0.273893  eval-logloss:0.276451 
-## [97] train-logloss:0.272634  eval-logloss:0.275314 
-## [98] train-logloss:0.272315  eval-logloss:0.275097 
-## [99] train-logloss:0.272031  eval-logloss:0.274841 
-## [100]    train-logloss:0.271797  eval-logloss:0.274690 
-## [101]    train-logloss:0.271332  eval-logloss:0.274259 
-## [102]    train-logloss:0.270691  eval-logloss:0.273673 
-## [103]    train-logloss:0.270449  eval-logloss:0.273463 
-## [104]    train-logloss:0.269993  eval-logloss:0.273082 
-## [105]    train-logloss:0.269671  eval-logloss:0.272842 
-## [106]    train-logloss:0.269237  eval-logloss:0.272431 
-## [107]    train-logloss:0.268992  eval-logloss:0.272254 
-## [108]    train-logloss:0.268296  eval-logloss:0.271656 
-## [109]    train-logloss:0.268071  eval-logloss:0.271497 
-## [110]    train-logloss:0.267862  eval-logloss:0.271313 
-## [111]    train-logloss:0.267088  eval-logloss:0.270609 
-## [112]    train-logloss:0.266810  eval-logloss:0.270390 
-## [113]    train-logloss:0.266474  eval-logloss:0.270057 
-## [114]    train-logloss:0.266262  eval-logloss:0.269872 
-## [115]    train-logloss:0.265934  eval-logloss:0.269627 
-## [116]    train-logloss:0.265774  eval-logloss:0.269453 
-## [117]    train-logloss:0.265309  eval-logloss:0.269009 
-## [118]    train-logloss:0.265035  eval-logloss:0.268822 
-## [119]    train-logloss:0.264851  eval-logloss:0.268664 
-## [120]    train-logloss:0.264699  eval-logloss:0.268495 
-## [121]    train-logloss:0.264373  eval-logloss:0.268215 
-## [122]    train-logloss:0.264044  eval-logloss:0.268005 
-## [123]    train-logloss:0.263657  eval-logloss:0.267742 
-## [124]    train-logloss:0.263285  eval-logloss:0.267382 
-## [125]    train-logloss:0.263114  eval-logloss:0.267241 
-## [126]    train-logloss:0.262274  eval-logloss:0.266481 
-## [127]    train-logloss:0.262067  eval-logloss:0.266312 
-## [128]    train-logloss:0.261825  eval-logloss:0.266147 
-## [129]    train-logloss:0.261614  eval-logloss:0.265973 
-## [130]    train-logloss:0.261392  eval-logloss:0.265785 
-## [131]    train-logloss:0.261187  eval-logloss:0.265648 
-## [132]    train-logloss:0.260863  eval-logloss:0.265376 
-## [133]    train-logloss:0.260672  eval-logloss:0.265188 
-## [134]    train-logloss:0.260456  eval-logloss:0.265000 
-## [135]    train-logloss:0.260053  eval-logloss:0.264656 
-## [136]    train-logloss:0.259880  eval-logloss:0.264508 
-## [137]    train-logloss:0.259681  eval-logloss:0.264393 
-## [138]    train-logloss:0.259283  eval-logloss:0.264113 
-## [139]    train-logloss:0.259048  eval-logloss:0.263963 
-## [140]    train-logloss:0.258827  eval-logloss:0.263773 
-## [141]    train-logloss:0.258724  eval-logloss:0.263696 
-## [142]    train-logloss:0.258566  eval-logloss:0.263539 
-## [143]    train-logloss:0.258411  eval-logloss:0.263435 
-## [144]    train-logloss:0.258166  eval-logloss:0.263267 
-## [145]    train-logloss:0.257955  eval-logloss:0.263093 
-## [146]    train-logloss:0.257599  eval-logloss:0.262819 
-## [147]    train-logloss:0.257461  eval-logloss:0.262703 
-## [148]    train-logloss:0.257054  eval-logloss:0.262379 
-## [149]    train-logloss:0.256810  eval-logloss:0.262130 
-## [150]    train-logloss:0.256599  eval-logloss:0.262007 
-## [151]    train-logloss:0.256465  eval-logloss:0.261927 
-## [152]    train-logloss:0.256349  eval-logloss:0.261836 
-## [153]    train-logloss:0.256053  eval-logloss:0.261648 
-## [154]    train-logloss:0.255675  eval-logloss:0.261313 
-## [155]    train-logloss:0.255579  eval-logloss:0.261235 
-## [156]    train-logloss:0.255348  eval-logloss:0.261074 
-## [157]    train-logloss:0.255136  eval-logloss:0.260921 
-## [158]    train-logloss:0.254460  eval-logloss:0.260376 
-## [159]    train-logloss:0.254303  eval-logloss:0.260261 
-## [160]    train-logloss:0.254109  eval-logloss:0.260095 
-## [161]    train-logloss:0.253921  eval-logloss:0.260007 
-## [162]    train-logloss:0.253716  eval-logloss:0.259925 
-## [163]    train-logloss:0.253631  eval-logloss:0.259835 
-## [164]    train-logloss:0.253509  eval-logloss:0.259752 
-## [165]    train-logloss:0.253373  eval-logloss:0.259682 
-## [166]    train-logloss:0.253272  eval-logloss:0.259615 
-## [167]    train-logloss:0.253169  eval-logloss:0.259545 
-## [168]    train-logloss:0.253007  eval-logloss:0.259435 
-## [169]    train-logloss:0.252907  eval-logloss:0.259380 
-## [170]    train-logloss:0.252799  eval-logloss:0.259302 
-## [171]    train-logloss:0.252720  eval-logloss:0.259232 
-## [172]    train-logloss:0.252447  eval-logloss:0.259042 
-## [173]    train-logloss:0.252187  eval-logloss:0.258918 
-## [174]    train-logloss:0.251946  eval-logloss:0.258730 
-## [175]    train-logloss:0.251849  eval-logloss:0.258668 
-## [176]    train-logloss:0.251748  eval-logloss:0.258613 
-## [177]    train-logloss:0.251652  eval-logloss:0.258561 
-## [178]    train-logloss:0.251499  eval-logloss:0.258481 
-## [179]    train-logloss:0.251304  eval-logloss:0.258313 
-## [180]    train-logloss:0.250837  eval-logloss:0.257922 
-## [181]    train-logloss:0.250667  eval-logloss:0.257822 
-## [182]    train-logloss:0.250445  eval-logloss:0.257721 
-## [183]    train-logloss:0.250308  eval-logloss:0.257614 
-## [184]    train-logloss:0.250228  eval-logloss:0.257526 
-## [185]    train-logloss:0.249798  eval-logloss:0.257198 
-## [186]    train-logloss:0.249378  eval-logloss:0.256864 
-## [187]    train-logloss:0.249219  eval-logloss:0.256763 
-## [188]    train-logloss:0.249156  eval-logloss:0.256723 
-## [189]    train-logloss:0.249038  eval-logloss:0.256637 
-## [190]    train-logloss:0.248938  eval-logloss:0.256592 
-## [191]    train-logloss:0.248811  eval-logloss:0.256535 
-## [192]    train-logloss:0.248679  eval-logloss:0.256490 
-## [193]    train-logloss:0.248513  eval-logloss:0.256431 
-## [194]    train-logloss:0.248407  eval-logloss:0.256368 
-## [195]    train-logloss:0.248249  eval-logloss:0.256277 
-## [196]    train-logloss:0.248160  eval-logloss:0.256196 
-## [197]    train-logloss:0.247971  eval-logloss:0.256032 
-## [198]    train-logloss:0.247822  eval-logloss:0.255901 
-## [199]    train-logloss:0.247705  eval-logloss:0.255838 
-## [200]    train-logloss:0.247609  eval-logloss:0.255762 
-## [201]    train-logloss:0.247535  eval-logloss:0.255739 
-## [202]    train-logloss:0.247441  eval-logloss:0.255685 
-## [203]    train-logloss:0.247240  eval-logloss:0.255524 
-## [204]    train-logloss:0.247131  eval-logloss:0.255436 
-## [205]    train-logloss:0.246988  eval-logloss:0.255323 
-## [206]    train-logloss:0.246785  eval-logloss:0.255198 
-## [207]    train-logloss:0.246654  eval-logloss:0.255142 
-## [208]    train-logloss:0.246446  eval-logloss:0.254996 
-## [209]    train-logloss:0.246348  eval-logloss:0.254931 
-## [210]    train-logloss:0.246165  eval-logloss:0.254786 
-## [211]    train-logloss:0.246066  eval-logloss:0.254720 
-## [212]    train-logloss:0.245736  eval-logloss:0.254513 
-## [213]    train-logloss:0.245664  eval-logloss:0.254461 
-## [214]    train-logloss:0.245561  eval-logloss:0.254392 
-## [215]    train-logloss:0.245443  eval-logloss:0.254317 
-## [216]    train-logloss:0.245350  eval-logloss:0.254269 
-## [217]    train-logloss:0.245291  eval-logloss:0.254218 
-## [218]    train-logloss:0.245140  eval-logloss:0.254094 
-## [219]    train-logloss:0.245043  eval-logloss:0.254024 
-## [220]    train-logloss:0.244958  eval-logloss:0.253995 
-## [221]    train-logloss:0.244816  eval-logloss:0.253876 
-## [222]    train-logloss:0.244724  eval-logloss:0.253781 
-## [223]    train-logloss:0.244631  eval-logloss:0.253751 
-## [224]    train-logloss:0.244537  eval-logloss:0.253714 
-## [225]    train-logloss:0.244319  eval-logloss:0.253570 
-## [226]    train-logloss:0.244271  eval-logloss:0.253525 
-## [227]    train-logloss:0.244172  eval-logloss:0.253476 
-## [228]    train-logloss:0.243901  eval-logloss:0.253316 
-## [229]    train-logloss:0.243468  eval-logloss:0.252916 
-## [230]    train-logloss:0.243359  eval-logloss:0.252854 
-## [231]    train-logloss:0.243128  eval-logloss:0.252656 
-## [232]    train-logloss:0.243014  eval-logloss:0.252604 
-## [233]    train-logloss:0.242899  eval-logloss:0.252531 
-## [234]    train-logloss:0.242803  eval-logloss:0.252462 
-## [235]    train-logloss:0.242729  eval-logloss:0.252427 
-## [236]    train-logloss:0.242608  eval-logloss:0.252370 
-## [237]    train-logloss:0.242505  eval-logloss:0.252246 
-## [238]    train-logloss:0.242442  eval-logloss:0.252237 
-## [239]    train-logloss:0.242388  eval-logloss:0.252198 
-## [240]    train-logloss:0.242301  eval-logloss:0.252162 
-## [241]    train-logloss:0.242122  eval-logloss:0.252029 
-## [242]    train-logloss:0.242017  eval-logloss:0.251973 
-## [243]    train-logloss:0.241912  eval-logloss:0.251963 
-## [244]    train-logloss:0.241832  eval-logloss:0.251919 
-## [245]    train-logloss:0.241757  eval-logloss:0.251886 
-## [246]    train-logloss:0.241623  eval-logloss:0.251735 
-## [247]    train-logloss:0.241422  eval-logloss:0.251580 
-## [248]    train-logloss:0.241294  eval-logloss:0.251530 
-## [249]    train-logloss:0.241198  eval-logloss:0.251479 
-## [250]    train-logloss:0.241083  eval-logloss:0.251455 
-## [251]    train-logloss:0.241011  eval-logloss:0.251452 
-## [252]    train-logloss:0.240952  eval-logloss:0.251435 
-## [253]    train-logloss:0.240864  eval-logloss:0.251411 
-## [254]    train-logloss:0.240798  eval-logloss:0.251365 
-## [255]    train-logloss:0.240726  eval-logloss:0.251334 
-## [256]    train-logloss:0.240644  eval-logloss:0.251325 
-## [257]    train-logloss:0.240581  eval-logloss:0.251282 
-## [258]    train-logloss:0.240530  eval-logloss:0.251265 
-## [259]    train-logloss:0.240439  eval-logloss:0.251249 
-## [260]    train-logloss:0.240344  eval-logloss:0.251190 
-## [261]    train-logloss:0.240243  eval-logloss:0.251130 
-## [262]    train-logloss:0.240180  eval-logloss:0.251085 
-## [263]    train-logloss:0.240051  eval-logloss:0.251027 
-## [264]    train-logloss:0.239997  eval-logloss:0.250988 
-## [265]    train-logloss:0.239946  eval-logloss:0.250946 
-## [266]    train-logloss:0.239896  eval-logloss:0.250938 
-## [267]    train-logloss:0.239820  eval-logloss:0.250942 
-## [268]    train-logloss:0.239737  eval-logloss:0.250919 
-## [269]    train-logloss:0.239605  eval-logloss:0.250850 
-## [270]    train-logloss:0.239430  eval-logloss:0.250766 
-## [271]    train-logloss:0.239347  eval-logloss:0.250700 
-## [272]    train-logloss:0.239209  eval-logloss:0.250536 
-## [273]    train-logloss:0.239145  eval-logloss:0.250500 
-## [274]    train-logloss:0.239077  eval-logloss:0.250475 
-## [275]    train-logloss:0.238913  eval-logloss:0.250437 
-## [276]    train-logloss:0.238818  eval-logloss:0.250377 
-## [277]    train-logloss:0.238773  eval-logloss:0.250296 
-## [278]    train-logloss:0.238610  eval-logloss:0.250191 
-## [279]    train-logloss:0.238536  eval-logloss:0.250150 
-## [280]    train-logloss:0.238387  eval-logloss:0.250089 
-## [281]    train-logloss:0.238253  eval-logloss:0.249994 
-## [282]    train-logloss:0.238192  eval-logloss:0.249965 
-## [283]    train-logloss:0.238129  eval-logloss:0.249915 
-## [284]    train-logloss:0.237912  eval-logloss:0.249700 
-## [285]    train-logloss:0.237826  eval-logloss:0.249651 
-## [286]    train-logloss:0.237748  eval-logloss:0.249606 
-## [287]    train-logloss:0.237627  eval-logloss:0.249539 
-## [288]    train-logloss:0.237560  eval-logloss:0.249467 
-## [289]    train-logloss:0.237396  eval-logloss:0.249404 
-## [290]    train-logloss:0.237302  eval-logloss:0.249388 
-## [291]    train-logloss:0.237185  eval-logloss:0.249319 
-## [292]    train-logloss:0.236925  eval-logloss:0.249084 
-## [293]    train-logloss:0.236772  eval-logloss:0.248994 
-## [294]    train-logloss:0.236700  eval-logloss:0.248941 
-## [295]    train-logloss:0.236631  eval-logloss:0.248927 
-## [296]    train-logloss:0.236567  eval-logloss:0.248899 
-## [297]    train-logloss:0.236526  eval-logloss:0.248872 
-## [298]    train-logloss:0.236235  eval-logloss:0.248733 
-## [299]    train-logloss:0.236032  eval-logloss:0.248620 
-## [300]    train-logloss:0.235962  eval-logloss:0.248576</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="modeling.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicción</span></span>
-<span id="cb29-2"><a href="modeling.html#cb29-2" aria-hidden="true" tabindex="-1"></a>xgb_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_model, Xb)</span>
-<span id="cb29-3"><a href="modeling.html#cb29-3" aria-hidden="true" tabindex="-1"></a>XGpred<span class="ot">&lt;-</span><span class="fu">data.frame</span>(y, xgb_pred)</span>
-<span id="cb29-4"><a href="modeling.html#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(XGpred)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;xgb_pred&quot;</span>)</span></code></pre></div>
+## [2]  train-logloss:0.634519  eval-logloss:0.634210 
+## [3]  train-logloss:0.609105  eval-logloss:0.608792 
+## [4]  train-logloss:0.585925  eval-logloss:0.585632 
+## [5]  train-logloss:0.566846  eval-logloss:0.566520 
+## [6]  train-logloss:0.547866  eval-logloss:0.547613 
+## [7]  train-logloss:0.531196  eval-logloss:0.530953 
+## [8]  train-logloss:0.514483  eval-logloss:0.514309 
+## [9]  train-logloss:0.500674  eval-logloss:0.500550 
+## [10] train-logloss:0.488633  eval-logloss:0.488497 
+## [11] train-logloss:0.479041  eval-logloss:0.478889 
+## [12] train-logloss:0.466199  eval-logloss:0.466273 
+## [13] train-logloss:0.455235  eval-logloss:0.455273 
+## [14] train-logloss:0.444384  eval-logloss:0.444325 
+## [15] train-logloss:0.434323  eval-logloss:0.434283 
+## [16] train-logloss:0.425645  eval-logloss:0.425530 
+## [17] train-logloss:0.417293  eval-logloss:0.417227 
+## [18] train-logloss:0.410248  eval-logloss:0.410186 
+## [19] train-logloss:0.402595  eval-logloss:0.402522 
+## [20] train-logloss:0.395693  eval-logloss:0.395637 
+## [21] train-logloss:0.389155  eval-logloss:0.389095 
+## [22] train-logloss:0.383109  eval-logloss:0.383009 
+## [23] train-logloss:0.377561  eval-logloss:0.377454 
+## [24] train-logloss:0.372889  eval-logloss:0.372789 
+## [25] train-logloss:0.368388  eval-logloss:0.368239 
+## [26] train-logloss:0.364201  eval-logloss:0.364095 
+## [27] train-logloss:0.360773  eval-logloss:0.360646 
+## [28] train-logloss:0.357228  eval-logloss:0.357109 
+## [29] train-logloss:0.353985  eval-logloss:0.353856 
+## [30] train-logloss:0.350971  eval-logloss:0.350842 
+## [31] train-logloss:0.348278  eval-logloss:0.348216 
+## [32] train-logloss:0.344813  eval-logloss:0.344815 
+## [33] train-logloss:0.342739  eval-logloss:0.342785 
+## [34] train-logloss:0.340321  eval-logloss:0.340383 
+## [35] train-logloss:0.337858  eval-logloss:0.337944 
+## [36] train-logloss:0.335790  eval-logloss:0.335880 
+## [37] train-logloss:0.333549  eval-logloss:0.333720 
+## [38] train-logloss:0.331315  eval-logloss:0.331577 
+## [39] train-logloss:0.328867  eval-logloss:0.329153 
+## [40] train-logloss:0.326044  eval-logloss:0.326437 
+## [41] train-logloss:0.323937  eval-logloss:0.324386 
+## [42] train-logloss:0.322231  eval-logloss:0.322730 
+## [43] train-logloss:0.320210  eval-logloss:0.320683 
+## [44] train-logloss:0.317851  eval-logloss:0.318520 
+## [45] train-logloss:0.316094  eval-logloss:0.316837 
+## [46] train-logloss:0.314676  eval-logloss:0.315437 
+## [47] train-logloss:0.313541  eval-logloss:0.314292 
+## [48] train-logloss:0.312309  eval-logloss:0.313026 
+## [49] train-logloss:0.310844  eval-logloss:0.311632 
+## [50] train-logloss:0.308857  eval-logloss:0.309670 
+## [51] train-logloss:0.307746  eval-logloss:0.308592 
+## [52] train-logloss:0.306746  eval-logloss:0.307586 
+## [53] train-logloss:0.305816  eval-logloss:0.306667 
+## [54] train-logloss:0.304803  eval-logloss:0.305653 
+## [55] train-logloss:0.303540  eval-logloss:0.304482 
+## [56] train-logloss:0.302516  eval-logloss:0.303542 
+## [57] train-logloss:0.301271  eval-logloss:0.302368 
+## [58] train-logloss:0.300415  eval-logloss:0.301540 
+## [59] train-logloss:0.298242  eval-logloss:0.299466 
+## [60] train-logloss:0.297357  eval-logloss:0.298655 
+## [61] train-logloss:0.295451  eval-logloss:0.296791 
+## [62] train-logloss:0.294890  eval-logloss:0.296236 
+## [63] train-logloss:0.294277  eval-logloss:0.295646 
+## [64] train-logloss:0.293508  eval-logloss:0.294877 
+## [65] train-logloss:0.291941  eval-logloss:0.293413 
+## [66] train-logloss:0.290419  eval-logloss:0.291974 
+## [67] train-logloss:0.289630  eval-logloss:0.291245 
+## [68] train-logloss:0.289161  eval-logloss:0.290767 
+## [69] train-logloss:0.288363  eval-logloss:0.289978 
+## [70] train-logloss:0.287609  eval-logloss:0.289273 
+## [71] train-logloss:0.287048  eval-logloss:0.288743 
+## [72] train-logloss:0.286103  eval-logloss:0.287872 
+## [73] train-logloss:0.284976  eval-logloss:0.286776 
+## [74] train-logloss:0.284490  eval-logloss:0.286322 
+## [75] train-logloss:0.284074  eval-logloss:0.285973 
+## [76] train-logloss:0.283231  eval-logloss:0.285190 
+## [77] train-logloss:0.282669  eval-logloss:0.284668 
+## [78] train-logloss:0.281071  eval-logloss:0.283244 
+## [79] train-logloss:0.280655  eval-logloss:0.282900 
+## [80] train-logloss:0.279644  eval-logloss:0.281914 
+## [81] train-logloss:0.279367  eval-logloss:0.281691 
+## [82] train-logloss:0.279010  eval-logloss:0.281362 
+## [83] train-logloss:0.278649  eval-logloss:0.281034 
+## [84] train-logloss:0.278323  eval-logloss:0.280733 
+## [85] train-logloss:0.278069  eval-logloss:0.280463 
+## [86] train-logloss:0.276995  eval-logloss:0.279558 
+## [87] train-logloss:0.276606  eval-logloss:0.279208 
+## [88] train-logloss:0.276111  eval-logloss:0.278831 
+## [89] train-logloss:0.275657  eval-logloss:0.278398 
+## [90] train-logloss:0.275263  eval-logloss:0.278062 
+## [91] train-logloss:0.274939  eval-logloss:0.277815 
+## [92] train-logloss:0.274422  eval-logloss:0.277325 
+## [93] train-logloss:0.273725  eval-logloss:0.276732 
+## [94] train-logloss:0.273171  eval-logloss:0.276249 
+## [95] train-logloss:0.272901  eval-logloss:0.276002 
+## [96] train-logloss:0.272569  eval-logloss:0.275700 
+## [97] train-logloss:0.272104  eval-logloss:0.275275 
+## [98] train-logloss:0.271863  eval-logloss:0.275099 
+## [99] train-logloss:0.271468  eval-logloss:0.274776 
+## [100]    train-logloss:0.271201  eval-logloss:0.274554 
+## [101]    train-logloss:0.270736  eval-logloss:0.274146 
+## [102]    train-logloss:0.270378  eval-logloss:0.273832 
+## [103]    train-logloss:0.270141  eval-logloss:0.273646 
+## [104]    train-logloss:0.269385  eval-logloss:0.273042 
+## [105]    train-logloss:0.269155  eval-logloss:0.272826 
+## [106]    train-logloss:0.268807  eval-logloss:0.272559 
+## [107]    train-logloss:0.268504  eval-logloss:0.272288 
+## [108]    train-logloss:0.268036  eval-logloss:0.271872 
+## [109]    train-logloss:0.267784  eval-logloss:0.271637 
+## [110]    train-logloss:0.267582  eval-logloss:0.271513 
+## [111]    train-logloss:0.267223  eval-logloss:0.271168 
+## [112]    train-logloss:0.266754  eval-logloss:0.270810 
+## [113]    train-logloss:0.265659  eval-logloss:0.269888 
+## [114]    train-logloss:0.265202  eval-logloss:0.269495 
+## [115]    train-logloss:0.264880  eval-logloss:0.269336 
+## [116]    train-logloss:0.263929  eval-logloss:0.268461 
+## [117]    train-logloss:0.263376  eval-logloss:0.267949 
+## [118]    train-logloss:0.263250  eval-logloss:0.267829 
+## [119]    train-logloss:0.262907  eval-logloss:0.267577 
+## [120]    train-logloss:0.262734  eval-logloss:0.267405 
+## [121]    train-logloss:0.262587  eval-logloss:0.267291 
+## [122]    train-logloss:0.262081  eval-logloss:0.266832 
+## [123]    train-logloss:0.261948  eval-logloss:0.266754 
+## [124]    train-logloss:0.261383  eval-logloss:0.266325 
+## [125]    train-logloss:0.261174  eval-logloss:0.266142 
+## [126]    train-logloss:0.261013  eval-logloss:0.266026 
+## [127]    train-logloss:0.260847  eval-logloss:0.265866 
+## [128]    train-logloss:0.260674  eval-logloss:0.265741 
+## [129]    train-logloss:0.260310  eval-logloss:0.265411 
+## [130]    train-logloss:0.260167  eval-logloss:0.265288 
+## [131]    train-logloss:0.259570  eval-logloss:0.264835 
+## [132]    train-logloss:0.258900  eval-logloss:0.264244 
+## [133]    train-logloss:0.258648  eval-logloss:0.264080 
+## [134]    train-logloss:0.258419  eval-logloss:0.263875 
+## [135]    train-logloss:0.258258  eval-logloss:0.263755 
+## [136]    train-logloss:0.257913  eval-logloss:0.263464 
+## [137]    train-logloss:0.257753  eval-logloss:0.263378 
+## [138]    train-logloss:0.257609  eval-logloss:0.263227 
+## [139]    train-logloss:0.257371  eval-logloss:0.263024 
+## [140]    train-logloss:0.257222  eval-logloss:0.262941 
+## [141]    train-logloss:0.256982  eval-logloss:0.262763 
+## [142]    train-logloss:0.256702  eval-logloss:0.262522 
+## [143]    train-logloss:0.256548  eval-logloss:0.262415 
+## [144]    train-logloss:0.256218  eval-logloss:0.262162 
+## [145]    train-logloss:0.255991  eval-logloss:0.262003 
+## [146]    train-logloss:0.255836  eval-logloss:0.261923 
+## [147]    train-logloss:0.255702  eval-logloss:0.261854 
+## [148]    train-logloss:0.255568  eval-logloss:0.261730 
+## [149]    train-logloss:0.255427  eval-logloss:0.261632 
+## [150]    train-logloss:0.255240  eval-logloss:0.261564 
+## [151]    train-logloss:0.255007  eval-logloss:0.261414 
+## [152]    train-logloss:0.254807  eval-logloss:0.261299 
+## [153]    train-logloss:0.254369  eval-logloss:0.260990 
+## [154]    train-logloss:0.254229  eval-logloss:0.260896 
+## [155]    train-logloss:0.254123  eval-logloss:0.260816 
+## [156]    train-logloss:0.253849  eval-logloss:0.260645 
+## [157]    train-logloss:0.253522  eval-logloss:0.260359 
+## [158]    train-logloss:0.253416  eval-logloss:0.260259 
+## [159]    train-logloss:0.253255  eval-logloss:0.260145 
+## [160]    train-logloss:0.253131  eval-logloss:0.260043 
+## [161]    train-logloss:0.253009  eval-logloss:0.259956 
+## [162]    train-logloss:0.252886  eval-logloss:0.259892 
+## [163]    train-logloss:0.252698  eval-logloss:0.259786 
+## [164]    train-logloss:0.252546  eval-logloss:0.259666 
+## [165]    train-logloss:0.252319  eval-logloss:0.259546 
+## [166]    train-logloss:0.252187  eval-logloss:0.259466 
+## [167]    train-logloss:0.252069  eval-logloss:0.259399 
+## [168]    train-logloss:0.251327  eval-logloss:0.258765 
+## [169]    train-logloss:0.251237  eval-logloss:0.258689 
+## [170]    train-logloss:0.251162  eval-logloss:0.258648 
+## [171]    train-logloss:0.250991  eval-logloss:0.258525 
+## [172]    train-logloss:0.250804  eval-logloss:0.258382 
+## [173]    train-logloss:0.250668  eval-logloss:0.258288 
+## [174]    train-logloss:0.250386  eval-logloss:0.257996 
+## [175]    train-logloss:0.250283  eval-logloss:0.257935 
+## [176]    train-logloss:0.250172  eval-logloss:0.257861 
+## [177]    train-logloss:0.250042  eval-logloss:0.257808 
+## [178]    train-logloss:0.249833  eval-logloss:0.257620 
+## [179]    train-logloss:0.249700  eval-logloss:0.257530 
+## [180]    train-logloss:0.249567  eval-logloss:0.257509 
+## [181]    train-logloss:0.249463  eval-logloss:0.257460 
+## [182]    train-logloss:0.249361  eval-logloss:0.257378 
+## [183]    train-logloss:0.249179  eval-logloss:0.257271 
+## [184]    train-logloss:0.249083  eval-logloss:0.257201 
+## [185]    train-logloss:0.248957  eval-logloss:0.257123 
+## [186]    train-logloss:0.248771  eval-logloss:0.257028 
+## [187]    train-logloss:0.248655  eval-logloss:0.256988 
+## [188]    train-logloss:0.248396  eval-logloss:0.256756 
+## [189]    train-logloss:0.248247  eval-logloss:0.256700 
+## [190]    train-logloss:0.248175  eval-logloss:0.256695 
+## [191]    train-logloss:0.248073  eval-logloss:0.256616 
+## [192]    train-logloss:0.247965  eval-logloss:0.256548 
+## [193]    train-logloss:0.247839  eval-logloss:0.256465 
+## [194]    train-logloss:0.247612  eval-logloss:0.256296 
+## [195]    train-logloss:0.247522  eval-logloss:0.256242 
+## [196]    train-logloss:0.247448  eval-logloss:0.256199 
+## [197]    train-logloss:0.247193  eval-logloss:0.255968 
+## [198]    train-logloss:0.247062  eval-logloss:0.255877 
+## [199]    train-logloss:0.246904  eval-logloss:0.255823 
+## [200]    train-logloss:0.246775  eval-logloss:0.255723 
+## [201]    train-logloss:0.246563  eval-logloss:0.255599 
+## [202]    train-logloss:0.246364  eval-logloss:0.255498 
+## [203]    train-logloss:0.246249  eval-logloss:0.255479 
+## [204]    train-logloss:0.245498  eval-logloss:0.254797 
+## [205]    train-logloss:0.245399  eval-logloss:0.254740 
+## [206]    train-logloss:0.245328  eval-logloss:0.254704 
+## [207]    train-logloss:0.245207  eval-logloss:0.254586 
+## [208]    train-logloss:0.245106  eval-logloss:0.254506 
+## [209]    train-logloss:0.245025  eval-logloss:0.254451 
+## [210]    train-logloss:0.244919  eval-logloss:0.254374 
+## [211]    train-logloss:0.244858  eval-logloss:0.254332 
+## [212]    train-logloss:0.244543  eval-logloss:0.254083 
+## [213]    train-logloss:0.244297  eval-logloss:0.253880 
+## [214]    train-logloss:0.244149  eval-logloss:0.253764 
+## [215]    train-logloss:0.244068  eval-logloss:0.253737 
+## [216]    train-logloss:0.243980  eval-logloss:0.253655 
+## [217]    train-logloss:0.243871  eval-logloss:0.253604 
+## [218]    train-logloss:0.243725  eval-logloss:0.253508 
+## [219]    train-logloss:0.243501  eval-logloss:0.253382 
+## [220]    train-logloss:0.243409  eval-logloss:0.253283 
+## [221]    train-logloss:0.243292  eval-logloss:0.253190 
+## [222]    train-logloss:0.243207  eval-logloss:0.253117 
+## [223]    train-logloss:0.243135  eval-logloss:0.253056 
+## [224]    train-logloss:0.242859  eval-logloss:0.252884 
+## [225]    train-logloss:0.242725  eval-logloss:0.252752 
+## [226]    train-logloss:0.242648  eval-logloss:0.252732 
+## [227]    train-logloss:0.242443  eval-logloss:0.252562 
+## [228]    train-logloss:0.242372  eval-logloss:0.252536 
+## [229]    train-logloss:0.242296  eval-logloss:0.252478 
+## [230]    train-logloss:0.242179  eval-logloss:0.252390 
+## [231]    train-logloss:0.242088  eval-logloss:0.252274 
+## [232]    train-logloss:0.241883  eval-logloss:0.252141 
+## [233]    train-logloss:0.241801  eval-logloss:0.252104 
+## [234]    train-logloss:0.241717  eval-logloss:0.252067 
+## [235]    train-logloss:0.241645  eval-logloss:0.252013 
+## [236]    train-logloss:0.241537  eval-logloss:0.251924 
+## [237]    train-logloss:0.241460  eval-logloss:0.251891 
+## [238]    train-logloss:0.241360  eval-logloss:0.251865 
+## [239]    train-logloss:0.241252  eval-logloss:0.251837 
+## [240]    train-logloss:0.241183  eval-logloss:0.251800 
+## [241]    train-logloss:0.241077  eval-logloss:0.251739 
+## [242]    train-logloss:0.240986  eval-logloss:0.251660 
+## [243]    train-logloss:0.240920  eval-logloss:0.251608 
+## [244]    train-logloss:0.240817  eval-logloss:0.251555 
+## [245]    train-logloss:0.240740  eval-logloss:0.251512 
+## [246]    train-logloss:0.240578  eval-logloss:0.251413 
+## [247]    train-logloss:0.240356  eval-logloss:0.251249 
+## [248]    train-logloss:0.240265  eval-logloss:0.251222 
+## [249]    train-logloss:0.240195  eval-logloss:0.251218 
+## [250]    train-logloss:0.240089  eval-logloss:0.251162 
+## [251]    train-logloss:0.239816  eval-logloss:0.250950 
+## [252]    train-logloss:0.239736  eval-logloss:0.250933 
+## [253]    train-logloss:0.239674  eval-logloss:0.250915 
+## [254]    train-logloss:0.239522  eval-logloss:0.250830 
+## [255]    train-logloss:0.239421  eval-logloss:0.250732 
+## [256]    train-logloss:0.239336  eval-logloss:0.250682 
+## [257]    train-logloss:0.239117  eval-logloss:0.250541 
+## [258]    train-logloss:0.238919  eval-logloss:0.250460 
+## [259]    train-logloss:0.238814  eval-logloss:0.250370 
+## [260]    train-logloss:0.238725  eval-logloss:0.250334 
+## [261]    train-logloss:0.238647  eval-logloss:0.250306 
+## [262]    train-logloss:0.238605  eval-logloss:0.250284 
+## [263]    train-logloss:0.238545  eval-logloss:0.250251 
+## [264]    train-logloss:0.238476  eval-logloss:0.250208 
+## [265]    train-logloss:0.238354  eval-logloss:0.250147 
+## [266]    train-logloss:0.238243  eval-logloss:0.250077 
+## [267]    train-logloss:0.238178  eval-logloss:0.250045 
+## [268]    train-logloss:0.238133  eval-logloss:0.250027 
+## [269]    train-logloss:0.238035  eval-logloss:0.249985 
+## [270]    train-logloss:0.237967  eval-logloss:0.249962 
+## [271]    train-logloss:0.237864  eval-logloss:0.249918 
+## [272]    train-logloss:0.237788  eval-logloss:0.249843 
+## [273]    train-logloss:0.237731  eval-logloss:0.249802 
+## [274]    train-logloss:0.237647  eval-logloss:0.249784 
+## [275]    train-logloss:0.237488  eval-logloss:0.249658 
+## [276]    train-logloss:0.237411  eval-logloss:0.249615 
+## [277]    train-logloss:0.237348  eval-logloss:0.249561 
+## [278]    train-logloss:0.237254  eval-logloss:0.249520 
+## [279]    train-logloss:0.237140  eval-logloss:0.249429 
+## [280]    train-logloss:0.237049  eval-logloss:0.249430 
+## [281]    train-logloss:0.236929  eval-logloss:0.249348 
+## [282]    train-logloss:0.236850  eval-logloss:0.249306 
+## [283]    train-logloss:0.236764  eval-logloss:0.249227 
+## [284]    train-logloss:0.236687  eval-logloss:0.249184 
+## [285]    train-logloss:0.236589  eval-logloss:0.249112 
+## [286]    train-logloss:0.236485  eval-logloss:0.249100 
+## [287]    train-logloss:0.236335  eval-logloss:0.248956 
+## [288]    train-logloss:0.236227  eval-logloss:0.248878 
+## [289]    train-logloss:0.236160  eval-logloss:0.248851 
+## [290]    train-logloss:0.236019  eval-logloss:0.248777 
+## [291]    train-logloss:0.235950  eval-logloss:0.248768 
+## [292]    train-logloss:0.235821  eval-logloss:0.248704 
+## [293]    train-logloss:0.235640  eval-logloss:0.248588 
+## [294]    train-logloss:0.235597  eval-logloss:0.248543 
+## [295]    train-logloss:0.235491  eval-logloss:0.248484 
+## [296]    train-logloss:0.235406  eval-logloss:0.248439 
+## [297]    train-logloss:0.235354  eval-logloss:0.248436 
+## [298]    train-logloss:0.235296  eval-logloss:0.248397 
+## [299]    train-logloss:0.235242  eval-logloss:0.248376 
+## [300]    train-logloss:0.235119  eval-logloss:0.248325</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="modeling.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicción</span></span>
+<span id="cb28-2"><a href="modeling.html#cb28-2" aria-hidden="true" tabindex="-1"></a>xgb_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_model, Xb)</span>
+<span id="cb28-3"><a href="modeling.html#cb28-3" aria-hidden="true" tabindex="-1"></a>XGpred<span class="ot">&lt;-</span><span class="fu">data.frame</span>(y, xgb_pred)</span>
+<span id="cb28-4"><a href="modeling.html#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(XGpred)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;xgb_pred&quot;</span>)</span></code></pre></div>
 <p>Se muestran las evaluaciones del modelo, tanto in sample como out of sample, para las primeras y últimas iteraciones.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="modeling.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(XGpred<span class="sc">$</span>xgb_pred,XGpred<span class="sc">$</span>y)</span></code></pre></div>
-<pre><code>## [1] 0.2485761</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="modeling.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(XGpred<span class="sc">$</span>xgb_pred,XGpred<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] 0.2483252</code></pre>
 <p>Este modelo logró ganar el concurso con un error en los datasets de kaggle de 0.37598 y 0.37401.</p>
 </div>
 </div>
@@ -897,7 +898,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -937,6 +937,10 @@ gitbook.start({
 "text": null
 },
 "download": ["final_bookdown.pdf", "final_bookdown.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

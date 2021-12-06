@@ -754,12 +754,13 @@ cvlasso_a$gamlr$lambda[a_lambda]
 A continuacion una tabla con los coeficientes que se selecciona para el CV LASSO. Que sorprendentemente solo fueron 561.
 
 ```{r}
+library(DT)
 coefs<-coef(cvlasso_a, select="min", k=2, corrected=TRUE)
 coefs<-as.data.frame(coefs[,1])
 names(coefs)<-"valor"
 coefs<-coefs %>% filter(valor !=0)
-modelvariables<-row.names(coefs)
-modelvariables
+datatable(coefs%>% arrange(desc(valor)))
+
 ```
 
 ### LOG LOSS test OOS

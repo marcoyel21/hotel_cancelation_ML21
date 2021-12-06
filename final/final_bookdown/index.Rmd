@@ -182,8 +182,7 @@ plot_grid(hist1, hist2 ,
           ncol = 2, nrow = 1)
 ```
 
-**Agregar comparacion poblaciones** ##########################################
-#################################################
+Si observamos la variable Lead_time antes de la extracción de los datos de cancelación vemos solamente que existe un sesgo, sin embargo, al graficar la misma variable seleccionando solo donde se hicieron cancelaciones podemos ver más claramente la distribución y los picos que son interesantes para nuestro análisis 
 
 **Country:** esta variable presenta un dato totalmente atípico en la categoría PRT por lo que es importante considerarla ya que podría explicar una porción importante de las cancelaciones.
 
@@ -213,9 +212,8 @@ prop <- prop.table(a)
 prop
 ```
 
-**Joel** añadir descubrimientos agent 1 portugal discucsión 
-
-
+También se analizó la variable de Agente y se observa que ha una relación del agente 1 con las reservaciones del país PRT y las cancelaciones sin reembolso 
+ 
 ### Análisis de tendenciás en el tiempo EDA
 
 Para analizar tendencias de cancelación en el timepo se agrupan las cancelaciones por fecha.
@@ -359,7 +357,7 @@ ggplot(datos_l, aes(x = fecha, y = valor, colour = dia_sem)) +
     geom_point(size=0.5) + 
     labs(caption = "Media total: 6435")
 ```
-**Joel** Analisis días de la semana
+En la gráfica de días de la semana podemos observar picos de cancelaciones los días vieres y el más significativo parece ser en el periodo de semana santa lo cual suena lógico 
 
 ```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
 ggplot(agrupados, aes(x = fecha)) +
@@ -367,7 +365,8 @@ ggplot(agrupados, aes(x = fecha)) +
     geom_line(aes(y = ajuste_3, colour = dia_sem), size = 1) +
     xlab("")
 ```
-**Joel** Picos durante el año 
+En la siguiente grafica anual se observar dos picos que puede corresponder a las vacaciones de verano. 
+
 ```{r, echo = FALSE, fig.height=3, echo = FALSE,  out.width = '90%', fig.align= 'center', cache=TRUE, fig.asp = 0.35}
 ggplot(datos_dia, aes(x = fecha)) +
     geom_point(aes(y = n_2), alpha = 0.2, size = 1) +

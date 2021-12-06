@@ -848,7 +848,4 @@ Este modelo logró ganar el concurso con un error en los datasets de kaggle de  
 * [One hot encoding](https://www.educative.io/blog/one-hot-encoding)
 * [Matrices Ralas]( http://amunategui.github.io/sparse-matrix-glmnet/)
 * [Matrix](https://cran.rproject.org/web/packages/Matrix/index.html)
-* 
-* 
-* 
-* 
+* [XGBoost Documentation](https://xgboost.readthedocs.io/en/stable/)
